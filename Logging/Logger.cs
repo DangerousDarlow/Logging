@@ -24,8 +24,6 @@ namespace Logging
 
     private static List<ILogWriter> LogWriters { get; } = new List<ILogWriter>();
 
-    private static int LogWriterCount { get; set; }
-
 
     private static readonly object mLock = new object();
 
@@ -44,7 +42,6 @@ namespace Logging
           return;
 
         LogWriters.Add(logWriter);
-        ++LogWriterCount;
       }
     }
 
@@ -63,7 +60,6 @@ namespace Logging
           return;
 
         LogWriters.Remove(logWriter);
-        --LogWriterCount;
       }
     }
 
@@ -73,7 +69,6 @@ namespace Logging
       lock (mLock)
       {
         LogWriters.Clear();
-        LogWriterCount = 0;
       }
     }
 
@@ -86,9 +81,6 @@ namespace Logging
     {
       // The current level is checked first because this is a common early return scenario
       if (level > LogLevel)
-        return;
-
-      if (LogWriterCount == 0)
         return;
 
       // It is anticipated that execution where the lock is not available
