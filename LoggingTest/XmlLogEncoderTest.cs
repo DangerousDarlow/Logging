@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Diagnostics;
 using System.IO;
-using System.Text.RegularExpressions;
 using System.Xml;
 using Logging;
 using NUnit.Framework;
@@ -63,6 +62,8 @@ namespace LoggingTest
       const int framesToEncode = -1;
 
       var xmlLogEncoder = new XmlLogEncoder();
+
+      // ReSharper disable once ExpressionIsAlwaysNull
       var bytes = xmlLogEncoder.EncodeLogMessage(level, message, stackTrace, framesToEncode);
 
       var stream = new MemoryStream(bytes);

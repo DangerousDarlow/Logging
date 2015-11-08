@@ -13,12 +13,12 @@ namespace Logging
     /// <summary>
     /// Throws if encoder or any bytewriter is null
     /// </summary>
-    public LogWriter(ILogEncoder encoder, IReadOnlyCollection<IByteWriter> byteWriters)
+    public LogWriter(ILogEncoder encoder, params IByteWriter[] byteWriters)
     {
       if (encoder == null)
         throw new ArgumentNullException();
 
-      if ((byteWriters == null) || (byteWriters.Count == 0))
+      if ((byteWriters == null) || (byteWriters.Length == 0))
         throw new ArgumentNullException();
 
       Encoder = encoder;

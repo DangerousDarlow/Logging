@@ -21,7 +21,7 @@ namespace LoggingTest
       var byteWriter1 = Substitute.For<IByteWriter>();
       var byteWriter2 = Substitute.For<IByteWriter>();
 
-      var logWriter = new LogWriter(encoder, new[] {byteWriter1, byteWriter2}) {StackFramesToEncode = 4};
+      var logWriter = new LogWriter(encoder, byteWriter1, byteWriter2) {StackFramesToEncode = 4};
 
       logWriter.Log(level, message, stackTrace);
 
@@ -38,7 +38,7 @@ namespace LoggingTest
       var byteWriter = Substitute.For<IByteWriter>();
 
       // ReSharper disable once UnusedVariable
-      var logWriter = new LogWriter(null, new[] {byteWriter});
+      var logWriter = new LogWriter(null, byteWriter);
     }
 
 
@@ -60,7 +60,7 @@ namespace LoggingTest
       var encoder = Substitute.For<ILogEncoder>();
 
       // ReSharper disable once UnusedVariable
-      var logWriter = new LogWriter(encoder, new IByteWriter[] {});
+      var logWriter = new LogWriter(encoder);
     }
 
 
@@ -84,7 +84,7 @@ namespace LoggingTest
       var byteWriter = Substitute.For<IByteWriter>();
 
       // ReSharper disable once UnusedVariable
-      var logWriter = new LogWriter(encoder, new[] {byteWriter, null});
+      var logWriter = new LogWriter(encoder, byteWriter, null);
     }
 
 
@@ -94,7 +94,7 @@ namespace LoggingTest
       var encoder = Substitute.For<ILogEncoder>();
       var byteWriter = Substitute.For<IByteWriter>();
 
-      var logWriter = new LogWriter(encoder, new[] {byteWriter});
+      var logWriter = new LogWriter(encoder, byteWriter);
 
       Assert.AreEqual(3, logWriter.StackFramesToEncode);
     }
@@ -110,8 +110,7 @@ namespace LoggingTest
       var encoder = Substitute.For<ILogEncoder>();
       var byteWriter = Substitute.For<IByteWriter>();
 
-      var logWriter = new LogWriter(encoder, new[] {byteWriter});
-      logWriter.StackFramesToEncode = 4;
+      var logWriter = new LogWriter(encoder, byteWriter) {StackFramesToEncode = 4};
 
       encoder.EncodeLogMessage(Arg.Any<LogLevel>(), Arg.Any<string>(), Arg.Any<StackTrace>(), Arg.Any<int>()).Returns(x => null);
 
