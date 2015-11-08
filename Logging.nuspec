@@ -1,0 +1,13 @@
+<?xml version="1.0"?>
+<package xmlns="http://schemas.microsoft.com/packaging/2010/07/nuspec.xsd">
+  <metadata>
+    <id>Logging</id>
+    <version>1.0.0</version>
+    <authors>Nick Darlow</authors>
+    <requireLicenseAcceptance>false</requireLicenseAcceptance>
+    <description>A basic but flexible C# logging framework</description>
+  </metadata>
+  <files>
+    <file src="Lib\Logging.dll" target="lib" />
+  </files>
+</package>
