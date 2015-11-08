@@ -66,12 +66,25 @@ namespace LoggingTest
 
     [Test]
     [ExpectedException(typeof (ArgumentNullException))]
-    public void Constructor_throws_if_passed_null_writer()
+    public void Constructor_throws_if_passed_only_null_writer()
     {
       var encoder = Substitute.For<ILogEncoder>();
 
       // ReSharper disable once UnusedVariable
       var logWriter = new LogWriter(encoder, new IByteWriter[] {null});
+    }
+
+
+    [Test]
+    [ExpectedException(typeof (ArgumentNullException))]
+    public void Constructor_throws_if_passed_any_null_writer()
+    {
+      var encoder = Substitute.For<ILogEncoder>();
+
+      var byteWriter = Substitute.For<IByteWriter>();
+
+      // ReSharper disable once UnusedVariable
+      var logWriter = new LogWriter(encoder, new[] {byteWriter, null});
     }
 
 

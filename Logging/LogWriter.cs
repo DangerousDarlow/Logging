@@ -23,7 +23,7 @@ namespace Logging
 
       Encoder = encoder;
 
-      var nullWriter = byteWriters.All(writer => writer == null);
+      var nullWriter = byteWriters.Any(writer => writer == null);
       if (nullWriter)
         throw new ArgumentNullException();
 
