@@ -17,4 +17,4 @@ The following code shows how to create and add a log writer.
 # Build Instructions
 The project is developed using Visual Studio 2015. The project has some third party dependencies like the NUnit framework. The project has been configured to use NuGet so provided this is set up correctly Visual Studio should take care of the details.
 
-The project can be built by a continious integration tool such as TeamCity. Add NuGet, Visual Studio and Nunit TeamCity build steps. Add an AssemblyInfo patcher TeamCity build feature to link the assembly version to the build.
+The project can be built by a continious integration tool such as TeamCity. Add NuGet, Visual Studio and NUnit TeamCity build steps. Add an AssemblyInfo patcher TeamCity build feature to link the assembly version to the build.
