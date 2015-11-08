@@ -19,10 +19,16 @@ namespace Logging
     /// <summary>
     /// Log calls with level above this value will be discarded
     /// </summary>
-    public static LogLevel LogLevel { get; set; } = LogLevel.Warning;
+    public static LogLevel LogLevel
+    {
+      get { return mLogLevel; }
+      set { mLogLevel = value; }
+    }
 
 
     private static List<ILogWriter> LogWriters { get; } = new List<ILogWriter>();
+
+    private static volatile LogLevel mLogLevel = LogLevel.Warning;
 
 
     private static readonly object mLock = new object();
