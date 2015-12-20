@@ -93,17 +93,41 @@ namespace Logging
       // will be so rare that performance impact will be negligible
       lock (mLock)
       {
-        try
-        {
-          var stackTrace = new StackTrace(1, true);
+        var stackTrace = new StackTrace(1, true);
 
-          foreach (var logwriter in LogWriters)
-            logwriter.Log(level, message, stackTrace);
-        }
-        catch (Exception)
+        foreach (var logwriter in LogWriters)
         {
-          // Do nothing. Can't log because it's logging that's failed. Can't throw because
-          // an application failure due to debug logging would be ridiculous.
+          try
+          {
+            logwriter.Log(level, message, stackTrace);
+          }
+          catch (Exception)
+          {
+            // Do nothing. Can't log because it's logging that's failed. Can't throw because
+            // an application failure due to debug logging would be ridiculous.
+          }
+        }
+      }
+    }
+
+
+    public static void Log(LogLevel level, Exception exception)
+    {
+      // It is anticipated that execution where the lock is not available
+      // will be so rare that performance impact will be negligible
+      lock (mLock)
+      {
+        foreach (var logwriter in LogWriters)
+        {
+          try
+          {
+            logwriter.Log(level, exception);
+          }
+          catch (Exception)
+          {
+            // Do nothing. Can't log because it's logging that's failed. Can't throw because
+            // an application failure due to debug logging would be ridiculous.
+          }
         }
       }
     }

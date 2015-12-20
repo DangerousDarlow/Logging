@@ -30,9 +30,21 @@ namespace Logging
       Writers = byteWriters.ToList();
     }
 
+
     public void Log(LogLevel level, string message, StackTrace stackTrace)
     {
       var bytes = Encoder.EncodeLogMessage(level, message, stackTrace, StackFramesToEncode);
+      if (bytes == null)
+        return;
+
+      foreach (var byteWriter in Writers)
+        byteWriter.WriteBytes(bytes);
+    }
+
+
+    public void Log(LogLevel level, Exception exception)
+    {
+      var bytes = Encoder.EncodeLogMessage(level, exception, StackFramesToEncode);
       if (bytes == null)
         return;
 

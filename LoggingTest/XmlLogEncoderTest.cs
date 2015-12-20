@@ -128,25 +128,76 @@ namespace LoggingTest
 
 
     [Test]
-    public void File_name_regex_matches_file_name_only()
+    public void Exception_log_message_and_stack_frames_are_encoded_if_frames_to_encode_is_n()
     {
-      const string fileName = "Program.cs";
+      try
+      {
+        throw new Exception();
+      }
+      catch (Exception exception)
+      {
+        const int framesToEncode = 5;
 
-      var match = XmlLogEncoder.FileNameMatch.Match(fileName);
-      Assert.IsTrue(match.Success);
-      Assert.AreEqual(fileName, match.Groups[1].Value);
+        var xmlLogEncoder = new XmlLogEncoder();
+        var bytes = xmlLogEncoder.EncodeLogMessage(LogLevel.Error, exception, framesToEncode);
+
+        var stream = new MemoryStream(bytes);
+        var lDocument = new XmlDocument();
+        using (var xmlReader = XmlReader.Create(stream, new XmlReaderSettings {ConformanceLevel = ConformanceLevel.Fragment}))
+        {
+          lDocument.Load(xmlReader);
+        }
+
+        var lRootElement = lDocument.FirstChild as XmlElement;
+        Assert.IsNotNull(lRootElement);
+
+        // The exception will only have one stack frame
+        Assert.AreEqual(1, lRootElement.ChildNodes.Count);
+      }
+    }
+
+
+    [Test]
+    public void No_exception_stack_frames_are_encoded_if_frames_to_encode_is_zero()
+    {
+      try
+      {
+        throw new Exception();
+      }
+      catch (Exception exception)
+      {
+        const int framesToEncode = 0;
+
+        var xmlLogEncoder = new XmlLogEncoder();
+        var bytes = xmlLogEncoder.EncodeLogMessage(LogLevel.Error, exception, framesToEncode);
+
+        var stream = new MemoryStream(bytes);
+        var lDocument = new XmlDocument();
+        using (var xmlReader = XmlReader.Create(stream, new XmlReaderSettings {ConformanceLevel = ConformanceLevel.Fragment}))
+        {
+          lDocument.Load(xmlReader);
+        }
+
+        var lRootElement = lDocument.FirstChild as XmlElement;
+        Assert.IsNotNull(lRootElement);
+        Assert.AreEqual(framesToEncode, lRootElement.ChildNodes.Count);
+      }
     }
 
 
     [Test]
     public void File_name_regex_matches_file_path()
     {
-      const string fileName = "Program.cs";
-      const string path = @"C:\Users\Nick\Documents\Visual Studio 2015\Projects\Logging\ExampleLoggingApp\Program.cs";
+      var match = XmlLogEncoder.FileNameRegex.Match(@"C:\Path1\Path2\Program.cs");
+      Assert.AreEqual("Program.cs", match.Value);
+    }
 
-      var match = XmlLogEncoder.FileNameMatch.Match(path);
-      Assert.IsTrue(match.Success);
-      Assert.AreEqual(fileName, match.Groups[1].Value);
+
+    [Test]
+    public void Exception_stack_frame_regex_matches_example_stack_frame_line()
+    {
+      var match = XmlLogEncoder.ExceptionStackFrameRegex.Match(@"   at ExampleLoggingApp.Program.Fn(Int32 i) in C:\Path\Program.cs:line 12");
+      Assert.AreEqual(4, match.Groups.Count);
     }
   }
 }

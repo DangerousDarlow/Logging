@@ -1,4 +1,5 @@
-﻿using System.Diagnostics;
+﻿using System;
+using System.Diagnostics;
 
 namespace Logging
 {
@@ -8,5 +9,8 @@ namespace Logging
   public interface ILogWriter
   {
     void Log(LogLevel level, string message, StackTrace stackTrace);
+
+
+    void Log(LogLevel level, Exception exception);
   }
 }
