@@ -86,11 +86,9 @@ namespace LoggingTest
 
 
     [Test]
-    [ExpectedException(typeof(ArgumentNullException))]
     public void Constructor_throws_if_passed_null_stream_creation_delegate()
     {
-      // ReSharper disable once UnusedVariable
-      var lazyStreamByteWriter = new LazyStreamByteWriter(null);
+      Assert.That(() => new LazyStreamByteWriter(null), Throws.TypeOf<ArgumentNullException>());
     }
   }
 }

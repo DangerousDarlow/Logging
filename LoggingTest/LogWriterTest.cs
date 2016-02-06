@@ -32,59 +32,45 @@ namespace LoggingTest
 
 
     [Test]
-    [ExpectedException(typeof (ArgumentNullException))]
     public void Constructor_throws_if_passed_null_encoder()
     {
       var byteWriter = Substitute.For<IByteWriter>();
-
-      // ReSharper disable once UnusedVariable
-      var logWriter = new LogWriter(null, byteWriter);
+      Assert.That(()=> new LogWriter(null, byteWriter), Throws.TypeOf<ArgumentNullException>());
     }
 
 
     [Test]
-    [ExpectedException(typeof (ArgumentNullException))]
     public void Constructor_throws_if_passed_null_byte_writers()
     {
       var encoder = Substitute.For<ILogEncoder>();
-
-      // ReSharper disable once UnusedVariable
-      var logWriter = new LogWriter(encoder, null);
+      Assert.That(() => new LogWriter(encoder, null), Throws.TypeOf<ArgumentNullException>());
     }
 
 
     [Test]
-    [ExpectedException(typeof (ArgumentNullException))]
     public void Constructor_throws_if_passed_empty_byte_writers()
     {
       var encoder = Substitute.For<ILogEncoder>();
-
-      // ReSharper disable once UnusedVariable
-      var logWriter = new LogWriter(encoder);
+      Assert.That(() => new LogWriter(encoder), Throws.TypeOf<ArgumentNullException>());
     }
 
 
     [Test]
-    [ExpectedException(typeof (ArgumentNullException))]
     public void Constructor_throws_if_passed_only_null_writer()
     {
       var encoder = Substitute.For<ILogEncoder>();
-
-      // ReSharper disable once UnusedVariable
-      var logWriter = new LogWriter(encoder, new IByteWriter[] {null});
+      Assert.That(() => new LogWriter(encoder, new IByteWriter[] { null }), Throws.TypeOf<ArgumentNullException>());
     }
 
 
     [Test]
-    [ExpectedException(typeof (ArgumentNullException))]
     public void Constructor_throws_if_passed_any_null_writer()
     {
       var encoder = Substitute.For<ILogEncoder>();
 
       var byteWriter = Substitute.For<IByteWriter>();
 
-      // ReSharper disable once UnusedVariable
-      var logWriter = new LogWriter(encoder, byteWriter, null);
+      Assert.That(() => new LogWriter(encoder, byteWriter, null), Throws.TypeOf<ArgumentNullException>());
     }
 
 
