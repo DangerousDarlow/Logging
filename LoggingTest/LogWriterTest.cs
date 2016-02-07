@@ -17,7 +17,6 @@ namespace LoggingTest
       var stackTrace = Substitute.For<StackTrace>();
 
       var encoder = Substitute.For<ILogEncoder>();
-
       var byteWriter1 = Substitute.For<IByteWriter>();
       var byteWriter2 = Substitute.For<IByteWriter>();
 
@@ -26,6 +25,26 @@ namespace LoggingTest
       logWriter.Log(level, message, stackTrace);
 
       encoder.Received(1).EncodeLogMessage(level, message, stackTrace, logWriter.StackFramesToEncode);
+      byteWriter1.Received(1).WriteBytes(Arg.Any<byte[]>());
+      byteWriter2.Received(1).WriteBytes(Arg.Any<byte[]>());
+    }
+
+
+    [Test]
+    public void Log_exception_encodes_using_encoder_then_writes_using_all_byte_writers()
+    {
+      const LogLevel level = LogLevel.Error;
+
+      var encoder = Substitute.For<ILogEncoder>();
+      var byteWriter1 = Substitute.For<IByteWriter>();
+      var byteWriter2 = Substitute.For<IByteWriter>();
+
+      var logWriter = new LogWriter(encoder, byteWriter1, byteWriter2) { StackFramesToEncode = 4 };
+
+      var exception = new Exception();
+      logWriter.Log(level, exception);
+
+      encoder.Received(1).EncodeLogMessage(level, exception, logWriter.StackFramesToEncode);
       byteWriter1.Received(1).WriteBytes(Arg.Any<byte[]>());
       byteWriter2.Received(1).WriteBytes(Arg.Any<byte[]>());
     }
@@ -94,15 +113,32 @@ namespace LoggingTest
       var stackTrace = Substitute.For<StackTrace>();
 
       var encoder = Substitute.For<ILogEncoder>();
+      encoder.EncodeLogMessage(Arg.Any<LogLevel>(), Arg.Any<string>(), Arg.Any<StackTrace>(), Arg.Any<int>()).Returns(x => null);
+
       var byteWriter = Substitute.For<IByteWriter>();
 
       var logWriter = new LogWriter(encoder, byteWriter) {StackFramesToEncode = 4};
-
-      encoder.EncodeLogMessage(Arg.Any<LogLevel>(), Arg.Any<string>(), Arg.Any<StackTrace>(), Arg.Any<int>()).Returns(x => null);
-
       logWriter.Log(level, message, stackTrace);
 
       encoder.Received(1).EncodeLogMessage(Arg.Any<LogLevel>(), Arg.Any<string>(), Arg.Any<StackTrace>(), Arg.Any<int>());
+      byteWriter.DidNotReceive().WriteBytes(Arg.Any<byte[]>());
+    }
+
+
+    [Test]
+    public void Write_exception_does_not_occur_if_encoder_returns_null_bytes()
+    {
+      const LogLevel level = LogLevel.Error;
+
+      var encoder = Substitute.For<ILogEncoder>();
+      encoder.EncodeLogMessage(Arg.Any<LogLevel>(), Arg.Any<Exception>(), Arg.Any<int>()).Returns(x => null);
+
+      var byteWriter = Substitute.For<IByteWriter>();
+
+      var logWriter = new LogWriter(encoder, byteWriter) { StackFramesToEncode = 4 };
+      logWriter.Log(level, new Exception());
+
+      encoder.Received(1).EncodeLogMessage(Arg.Any<LogLevel>(), Arg.Any<Exception>(), Arg.Any<int>());
       byteWriter.DidNotReceive().WriteBytes(Arg.Any<byte[]>());
     }
 

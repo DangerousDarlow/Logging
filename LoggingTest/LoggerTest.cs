@@ -30,6 +30,26 @@ namespace LoggingTest
 
 
     [Test]
+    public void Log_exception_calls_through_to_log_writers_if_log_level_is_equal_to_current_logger_level()
+    {
+      Logger.ClearAllLogWriters();
+
+      var logWriter1 = Substitute.For<ILogWriter>();
+      Logger.AddLogWriter(logWriter1);
+
+      var logWriter2 = Substitute.For<ILogWriter>();
+      Logger.AddLogWriter(logWriter2);
+
+      const LogLevel level = LogLevel.Warning;
+      Logger.LogLevel = level;
+      Logger.Log(level, (Exception) null);
+
+      logWriter1.Received(1).Log(level, null);
+      logWriter2.Received(1).Log(level, null);
+    }
+
+
+    [Test]
     public void Log_does_not_call_through_to_log_writers_if_log_level_is_above_to_current_logger_level()
     {
       Logger.ClearAllLogWriters();
@@ -47,6 +67,27 @@ namespace LoggingTest
       Logger.LogLevel = initialLogLevel;
 
       logWriter.DidNotReceive().Log(LogLevel.Warning, null, Arg.Any<StackTrace>());
+    }
+
+
+    [Test]
+    public void Log_exception_does_not_call_through_to_log_writers_if_log_level_is_above_to_current_logger_level()
+    {
+      Logger.ClearAllLogWriters();
+
+      var logWriter = Substitute.For<ILogWriter>();
+      Logger.AddLogWriter(logWriter);
+
+      // Cache initial log level
+      var initialLogLevel = Logger.LogLevel;
+
+      Logger.LogLevel = LogLevel.Error;
+      Logger.Log(LogLevel.Warning, (Exception) null);
+
+      // Restore initial log level
+      Logger.LogLevel = initialLogLevel;
+
+      logWriter.DidNotReceive().Log(LogLevel.Warning, null);
     }
 
 
@@ -89,6 +130,15 @@ namespace LoggingTest
       Logger.ClearAllLogWriters();
 
       Logger.Log(LogLevel.Error, (string) null);
+    }
+
+
+    [Test]
+    public void Log_exception_does_not_throw_if_no_log_writers()
+    {
+      Logger.ClearAllLogWriters();
+
+      Logger.Log(LogLevel.Error, (Exception) null);
     }
 
 
@@ -138,7 +188,11 @@ namespace LoggingTest
       logWriter.When(writer => writer.Log(Arg.Any<LogLevel>(), Arg.Any<string>(), Arg.Any<StackTrace>()))
         .Throw(new Exception());
 
+      logWriter.When(writer => writer.Log(Arg.Any<LogLevel>(), Arg.Any<Exception>()))
+        .Throw(new Exception());
+
       Logger.Log(LogLevel.Warning, (string) null);
+      Logger.Log(LogLevel.Warning, (Exception) null);
     }
 
 

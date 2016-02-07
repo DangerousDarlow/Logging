@@ -30,8 +30,7 @@ namespace LoggingTest
 
       var lazyStreamByteWriter = new LazyStreamByteWriter(delegate
       {
-        ++createCalls;
-        return null;
+        throw new NotImplementedException();
       });
 
       Assert.AreEqual(0, createCalls);
@@ -49,8 +48,7 @@ namespace LoggingTest
 
       var lazyStreamByteWriter = new LazyStreamByteWriter(delegate
       {
-        ++createCalls;
-        return null;
+        throw new NotImplementedException();
       });
 
       Assert.AreEqual(0, createCalls);

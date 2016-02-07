@@ -113,6 +113,10 @@ namespace Logging
 
     public static void Log(LogLevel level, Exception exception)
     {
+      // The current level is checked first because this is a common early return scenario
+      if (level > LogLevel)
+        return;
+
       // It is anticipated that execution where the lock is not available
       // will be so rare that performance impact will be negligible
       lock (mLock)
