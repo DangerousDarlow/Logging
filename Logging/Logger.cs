@@ -82,7 +82,7 @@ namespace Logging
     /// Log a message if the level is equal to or less than the logger level.
     /// If the level is above the logger level the message will be disgarded.
     /// </summary>
-    public static void Log(LogLevel level, object id, params object[] parameters)
+    public static void Log(LogLevel level, string id, params object[] parameters)
     {
       // The current level is checked first because this is a common early return scenario
       if (level > LogLevel)

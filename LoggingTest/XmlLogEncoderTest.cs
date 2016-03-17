@@ -28,7 +28,7 @@ namespace LoggingTest
 
       var rootElement = document.FirstChild as XmlElement;
       Assert.IsNotNull(rootElement);
-      Assert.AreEqual(level.ToString().ToLower(), rootElement.Name);
+      Assert.AreEqual(Resources.LogElementName, rootElement.Name);
 
       Assert.IsTrue(rootElement.HasAttribute(Resources.TimestampAttributeName));
 
@@ -69,12 +69,12 @@ namespace LoggingTest
 
       var paramElement1 = paramElements[0] as XmlElement;
       Assert.NotNull(paramElement1);
-      Assert.AreEqual("0", paramElement1.GetAttribute(Resources.IndexAttributeName));
+      Assert.AreEqual("0", paramElement1.GetAttribute(Resources.IdAttributeName));
       Assert.AreEqual(param, paramElement1.InnerText);
 
       var paramElement2 = paramElements[1] as XmlElement;
       Assert.NotNull(paramElement2);
-      Assert.AreEqual("1", paramElement2.GetAttribute(Resources.IndexAttributeName));
+      Assert.AreEqual("1", paramElement2.GetAttribute(Resources.IdAttributeName));
       Assert.AreEqual("null", paramElement2.InnerText);
     }
   }

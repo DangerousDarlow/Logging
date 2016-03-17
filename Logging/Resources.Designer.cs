@@ -70,11 +70,11 @@ namespace Logging {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to idx.
+        ///   Looks up a localized string similar to log.
         /// </summary>
-        public static string IndexAttributeName {
+        public static string LogElementName {
             get {
-                return ResourceManager.GetString("IndexAttributeName", resourceCulture);
+                return ResourceManager.GetString("LogElementName", resourceCulture);
             }
         }
         
@@ -97,7 +97,7 @@ namespace Logging {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to time.
+        ///   Looks up a localized string similar to tstmp.
         /// </summary>
         public static string TimestampAttributeName {
             get {

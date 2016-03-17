@@ -123,13 +123,13 @@
   <data name="IdAttributeName" xml:space="preserve">
     <value>id</value>
   </data>
-  <data name="IndexAttributeName" xml:space="preserve">
-    <value>idx</value>
-  </data>
   <data name="SubdirectoryName" xml:space="preserve">
     <value>Logging</value>
   </data>
   <data name="TimestampAttributeName" xml:space="preserve">
-    <value>time</value>
+    <value>tstmp</value>
+  </data>
+  <data name="LogElementName" xml:space="preserve">
+    <value>log</value>
   </data>
 </root>

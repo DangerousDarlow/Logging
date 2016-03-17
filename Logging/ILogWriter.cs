@@ -5,6 +5,6 @@
   /// </summary>
   public interface ILogWriter
   {
-    void Log(LogLevel level, object id, params object[] parameters);
+    void Log(LogLevel level, string id, params object[] parameters);
   }
 }

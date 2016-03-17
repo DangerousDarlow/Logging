@@ -10,15 +10,15 @@ namespace Logging
   /// </summary>
   public class XmlLogEncoder : ILogEncoder
   {
-    public byte[] EncodeLogMessage(LogLevel level, object id, params object[] parameters)
+    public byte[] EncodeLogMessage(LogLevel level, string id, params object[] parameters)
     {
       var stringWriter = new StringWriter();
 
       using (var xmlWriter = XmlWriter.Create(stringWriter, mXmlWriterSettings))
       {
-        xmlWriter.WriteStartElement(level.ToString().ToLower());
+        xmlWriter.WriteStartElement(Resources.LogElementName);
         xmlWriter.WriteAttributeString(Resources.TimestampAttributeName, DateTime.Now.ToString("o"));
-        xmlWriter.WriteAttributeString(Resources.IdAttributeName, id.ToString());
+        xmlWriter.WriteAttributeString(Resources.IdAttributeName, id);
 
         if (parameters != null)
         {
@@ -28,7 +28,7 @@ namespace Logging
           foreach (var parameter in parameters)
           {
             xmlWriter.WriteStartElement(Resources.ParameterElementName);
-            xmlWriter.WriteAttributeString(Resources.IndexAttributeName, index.ToString());
+            xmlWriter.WriteAttributeString(Resources.IdAttributeName, index.ToString());
             xmlWriter.WriteString(parameter?.ToString() ?? "null");
             xmlWriter.WriteEndElement();
             ++index;
