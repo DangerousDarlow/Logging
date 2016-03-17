@@ -60,7 +60,6 @@
     <Compile Include="LazyStreamByteWriterTest.cs" />
     <Compile Include="LogWriterTest.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="RegularExpressionsTest.cs" />
     <Compile Include="XmlLogEncoderTest.cs" />
   </ItemGroup>
   <ItemGroup>

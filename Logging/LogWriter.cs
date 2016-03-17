@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.Linq;
 
 namespace Logging
@@ -31,9 +30,9 @@ namespace Logging
     }
 
 
-    public void Log(LogLevel level, string message, StackTrace stackTrace)
+    public void Log(LogLevel level, object id, params object[] parameters)
     {
-      var bytes = Encoder.EncodeLogMessage(level, message, stackTrace, StackFramesToEncode);
+      var bytes = Encoder.EncodeLogMessage(level, id, parameters);
       if (bytes == null)
         return;
 
@@ -41,22 +40,6 @@ namespace Logging
         byteWriter.WriteBytes(bytes);
     }
 
-
-    public void Log(LogLevel level, Exception exception)
-    {
-      var bytes = Encoder.EncodeLogMessage(level, exception, StackFramesToEncode);
-      if (bytes == null)
-        return;
-
-      foreach (var byteWriter in Writers)
-        byteWriter.WriteBytes(bytes);
-    }
-
-
-    /// <summary>
-    /// Set to -1 to encode all available stack frames
-    /// </summary>
-    public int StackFramesToEncode { get; set; } = 3;
 
     private ILogEncoder Encoder { get; }
 

@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Diagnostics;
 
 namespace Logging
 {
@@ -11,7 +10,7 @@ namespace Logging
   /// 
   /// var logEncoder = new XmlLogEncoder();
   /// var byteWriter = new LazyStreamByteWriter(FileStreamFactory.CreateApplicationDataFileStream);
-  /// var logWriter = new LogWriter(logEncoder, new[] { byteWriter });
+  /// var logWriter = new LogWriter(logEncoder, byteWriter);
   /// Logger.AddLogWriter(logWriter);
   /// </summary>
   public static class Logger
@@ -83,38 +82,13 @@ namespace Logging
     /// Log a message if the level is equal to or less than the logger level.
     /// If the level is above the logger level the message will be disgarded.
     /// </summary>
-    public static void Log(LogLevel level, string message)
+    public static void Log(LogLevel level, object id, params object[] parameters)
     {
       // The current level is checked first because this is a common early return scenario
       if (level > LogLevel)
         return;
 
-      // It is anticipated that execution where the lock is not available
-      // will be so rare that performance impact will be negligible
-      lock (mLock)
-      {
-        var stackTrace = new StackTrace(1, true);
-
-        foreach (var logwriter in LogWriters)
-        {
-          try
-          {
-            logwriter.Log(level, message, stackTrace);
-          }
-          catch (Exception)
-          {
-            // Do nothing. Can't log because it's logging that's failed. Can't throw because
-            // an application failure due to debug logging would be ridiculous.
-          }
-        }
-      }
-    }
-
-
-    public static void Log(LogLevel level, Exception exception)
-    {
-      // The current level is checked first because this is a common early return scenario
-      if (level > LogLevel)
+      if (id == null)
         return;
 
       // It is anticipated that execution where the lock is not available
@@ -125,7 +99,7 @@ namespace Logging
         {
           try
           {
-            logwriter.Log(level, exception);
+            logwriter.Log(level, id, parameters);
           }
           catch (Exception)
           {

@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Diagnostics;
 using Logging;
 using NSubstitute;
 using NUnit.Framework;
@@ -20,32 +19,14 @@ namespace LoggingTest
       var logWriter2 = Substitute.For<ILogWriter>();
       Logger.AddLogWriter(logWriter2);
 
-      const LogLevel level = LogLevel.Warning;
-      Logger.LogLevel = level;
-      Logger.Log(level, (string) null);
-
-      logWriter1.Received(1).Log(level, null, Arg.Any<StackTrace>());
-      logWriter2.Received(1).Log(level, null, Arg.Any<StackTrace>());
-    }
-
-
-    [Test]
-    public void Log_exception_calls_through_to_log_writers_if_log_level_is_equal_to_current_logger_level()
-    {
-      Logger.ClearAllLogWriters();
-
-      var logWriter1 = Substitute.For<ILogWriter>();
-      Logger.AddLogWriter(logWriter1);
-
-      var logWriter2 = Substitute.For<ILogWriter>();
-      Logger.AddLogWriter(logWriter2);
+      var obj = new object();
 
       const LogLevel level = LogLevel.Warning;
       Logger.LogLevel = level;
-      Logger.Log(level, (Exception) null);
+      Logger.Log(level, obj);
 
-      logWriter1.Received(1).Log(level, null);
-      logWriter2.Received(1).Log(level, null);
+      logWriter1.Received(1).Log(level, obj, Arg.Any<object[]>());
+      logWriter2.Received(1).Log(level, obj, Arg.Any<object[]>());
     }
 
 
@@ -60,34 +41,50 @@ namespace LoggingTest
       // Cache initial log level
       var initialLogLevel = Logger.LogLevel;
 
+      var obj = new object();
+
       Logger.LogLevel = LogLevel.Error;
-      Logger.Log(LogLevel.Warning, (string) null);
+      Logger.Log(LogLevel.Warning, obj);
 
       // Restore initial log level
       Logger.LogLevel = initialLogLevel;
 
-      logWriter.DidNotReceive().Log(LogLevel.Warning, null, Arg.Any<StackTrace>());
+      logWriter.DidNotReceive().Log(LogLevel.Warning, obj, Arg.Any<object[]>());
     }
 
 
     [Test]
-    public void Log_exception_does_not_call_through_to_log_writers_if_log_level_is_above_to_current_logger_level()
+    public void Log_calls_with_null_id_are_silently_discarded()
     {
       Logger.ClearAllLogWriters();
 
       var logWriter = Substitute.For<ILogWriter>();
       Logger.AddLogWriter(logWriter);
 
-      // Cache initial log level
-      var initialLogLevel = Logger.LogLevel;
+      const LogLevel level = LogLevel.Warning;
+      Logger.LogLevel = level;
+      Logger.Log(level, null);
 
-      Logger.LogLevel = LogLevel.Error;
-      Logger.Log(LogLevel.Warning, (Exception) null);
+      logWriter.DidNotReceive().Log(level, Arg.Any<object>(), Arg.Any<object[]>());
+    }
 
-      // Restore initial log level
-      Logger.LogLevel = initialLogLevel;
 
-      logWriter.DidNotReceive().Log(LogLevel.Warning, null);
+    [Test]
+    public void Log_calls_pass_through_parameter_array()
+    {
+      Logger.ClearAllLogWriters();
+
+      var logWriter1 = Substitute.For<ILogWriter>();
+      Logger.AddLogWriter(logWriter1);
+
+      var obj = new object();
+      var parameters = new object[0];
+
+      const LogLevel level = LogLevel.Warning;
+      Logger.LogLevel = level;
+      Logger.Log(level, obj, parameters);
+
+      logWriter1.Received(1).Log(level, obj, parameters);
     }
 
 
@@ -103,10 +100,12 @@ namespace LoggingTest
       Logger.AddLogWriter(logWriter2);
       Logger.RemoveLogWriter(logWriter2);
 
-      Logger.Log(Logger.LogLevel, (string) null);
+      var obj = new object();
 
-      logWriter1.Received(1).Log(Logger.LogLevel, null, Arg.Any<StackTrace>());
-      logWriter2.DidNotReceive().Log(Logger.LogLevel, null, Arg.Any<StackTrace>());
+      Logger.Log(Logger.LogLevel, obj);
+
+      logWriter1.Received(1).Log(Logger.LogLevel, obj, Arg.Any<object[]>());
+      logWriter2.DidNotReceive().Log(Logger.LogLevel, obj, Arg.Any<object[]>());
     }
 
 
@@ -117,10 +116,6 @@ namespace LoggingTest
 
       var logWriter = Substitute.For<ILogWriter>();
       Logger.RemoveLogWriter(logWriter);
-
-      Logger.Log(Logger.LogLevel, (string) null);
-
-      logWriter.DidNotReceive().Log(Logger.LogLevel, null, Arg.Any<StackTrace>());
     }
 
 
@@ -129,16 +124,7 @@ namespace LoggingTest
     {
       Logger.ClearAllLogWriters();
 
-      Logger.Log(LogLevel.Error, (string) null);
-    }
-
-
-    [Test]
-    public void Log_exception_does_not_throw_if_no_log_writers()
-    {
-      Logger.ClearAllLogWriters();
-
-      Logger.Log(LogLevel.Error, (Exception) null);
+      Logger.Log(LogLevel.Error, new object());
     }
 
 
@@ -155,10 +141,10 @@ namespace LoggingTest
 
       Logger.ClearAllLogWriters();
 
-      Logger.Log(Logger.LogLevel, (string) null);
+      Logger.Log(Logger.LogLevel, new object());
 
-      logWriter1.DidNotReceive().Log(Logger.LogLevel, null, Arg.Any<StackTrace>());
-      logWriter2.DidNotReceive().Log(Logger.LogLevel, null, Arg.Any<StackTrace>());
+      logWriter1.DidNotReceive().Log(Logger.LogLevel, Arg.Any<object>(), Arg.Any<object[]>());
+      logWriter2.DidNotReceive().Log(Logger.LogLevel, Arg.Any<object>(), Arg.Any<object[]>());
     }
 
 
@@ -171,9 +157,9 @@ namespace LoggingTest
       Logger.AddLogWriter(logWriter);
       Logger.AddLogWriter(logWriter);
 
-      Logger.Log(Logger.LogLevel, (string) null);
+      Logger.Log(Logger.LogLevel, new object());
 
-      logWriter.Received(1).Log(Logger.LogLevel, null, Arg.Any<StackTrace>());
+      logWriter.Received(1).Log(Logger.LogLevel, Arg.Any<object>(), Arg.Any<object[]>());
     }
 
 
@@ -185,38 +171,10 @@ namespace LoggingTest
       var logWriter = Substitute.For<ILogWriter>();
       Logger.AddLogWriter(logWriter);
 
-      logWriter.When(writer => writer.Log(Arg.Any<LogLevel>(), Arg.Any<string>(), Arg.Any<StackTrace>()))
+      logWriter.When(writer => writer.Log(Arg.Any<LogLevel>(), Arg.Any<object>(), Arg.Any<object[]>()))
         .Throw(new Exception());
 
-      logWriter.When(writer => writer.Log(Arg.Any<LogLevel>(), Arg.Any<Exception>()))
-        .Throw(new Exception());
-
-      Logger.Log(LogLevel.Warning, (string) null);
-      Logger.Log(LogLevel.Warning, (Exception) null);
-    }
-
-
-    [Test]
-    public void Log_passes_calling_method_stack_trace_to_log_writer()
-    {
-      Logger.ClearAllLogWriters();
-
-      var logWriter = Substitute.For<ILogWriter>();
-      Logger.AddLogWriter(logWriter);
-
-      StackTrace stackTracePassedToLogWriter = null;
-      logWriter.Log(Arg.Any<LogLevel>(), Arg.Any<string>(), Arg.Do<StackTrace>(x => stackTracePassedToLogWriter = x));
-
-      Logger.Log(LogLevel.Warning, (string) null);
-
-      var stackTrace = new StackTrace(true);
-      Assert.IsTrue(stackTracePassedToLogWriter.FrameCount > 0);
-      Assert.IsTrue(stackTrace.FrameCount > 0);
-      Assert.AreEqual(stackTrace.FrameCount, stackTracePassedToLogWriter.FrameCount);
-
-      var firstStackFrame = stackTrace.GetFrame(0);
-      var firstStackFramePassedToLogWriter = stackTrace.GetFrame(0);
-      Assert.AreEqual(firstStackFrame.GetMethod(), firstStackFramePassedToLogWriter.GetMethod());
+      Logger.Log(LogLevel.Warning, new object());
     }
   }
 }

@@ -1,35 +1,21 @@
-﻿using System;
-using Logging;
+﻿using Logging;
 
 namespace ExampleLoggingApp
 {
   internal class Program
   {
-    // ReSharper disable once UnusedMethodReturnValue.Local
-    // ReSharper disable once UnusedParameter.Local
-    private static int Fn(int i)
-    {
-      throw new Exception("exception message");
-    }
-
-
-    private static void Main(string[] args)
+    private static void Main()
     {
       var logEncoder = new XmlLogEncoder();
       var byteWriter = new LazyStreamByteWriter(FileStreamFactory.CreateApplicationDataFileStream);
       var logWriter = new LogWriter(logEncoder, byteWriter);
       Logger.AddLogWriter(logWriter);
 
-      try
-      {
-        Fn(123);
-      }
-      catch (Exception e)
-      {
-        Logger.Log(LogLevel.Error, e);
-      }
+      Logger.Log(LogLevel.Error, "id-str");
 
-      Logger.Log(LogLevel.Error, "message");
+      const string param = "param-str";
+
+      Logger.Log(LogLevel.Error, "id-str", param, null);
     }
   }
 }
