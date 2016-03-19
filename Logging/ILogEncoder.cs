@@ -2,6 +2,6 @@
 {
   public interface ILogEncoder
   {
-    byte[] EncodeLogMessage(LogLevel level, string id, params object[] parameters);
+    byte[] EncodeLogMessage(string id, params object[] parameters);
   }
 }

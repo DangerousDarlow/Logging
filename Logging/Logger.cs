@@ -99,7 +99,7 @@ namespace Logging
         {
           try
           {
-            logwriter.Log(level, id, parameters);
+            logwriter.Log(id, parameters);
           }
           catch (Exception)
           {

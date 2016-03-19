@@ -25,8 +25,8 @@ namespace LoggingTest
       Logger.LogLevel = level;
       Logger.Log(level, id);
 
-      logWriter1.Received(1).Log(level, id, Arg.Any<object[]>());
-      logWriter2.Received(1).Log(level, id, Arg.Any<object[]>());
+      logWriter1.Received(1).Log(id, Arg.Any<object[]>());
+      logWriter2.Received(1).Log(id, Arg.Any<object[]>());
     }
 
 
@@ -49,7 +49,7 @@ namespace LoggingTest
       // Restore initial log level
       Logger.LogLevel = initialLogLevel;
 
-      logWriter.DidNotReceive().Log(LogLevel.Warning, id, Arg.Any<object[]>());
+      logWriter.DidNotReceive().Log(id, Arg.Any<object[]>());
     }
 
 
@@ -65,7 +65,7 @@ namespace LoggingTest
       Logger.LogLevel = level;
       Logger.Log(level, null);
 
-      logWriter.DidNotReceive().Log(level, Arg.Any<string>(), Arg.Any<object[]>());
+      logWriter.DidNotReceive().Log(Arg.Any<string>(), Arg.Any<object[]>());
     }
 
 
@@ -84,7 +84,7 @@ namespace LoggingTest
       Logger.LogLevel = level;
       Logger.Log(level, id, parameters);
 
-      logWriter1.Received(1).Log(level, id, parameters);
+      logWriter1.Received(1).Log(id, parameters);
     }
 
 
@@ -104,8 +104,8 @@ namespace LoggingTest
 
       Logger.Log(Logger.LogLevel, id);
 
-      logWriter1.Received(1).Log(Logger.LogLevel, id, Arg.Any<object[]>());
-      logWriter2.DidNotReceive().Log(Logger.LogLevel, id, Arg.Any<object[]>());
+      logWriter1.Received(1).Log(id, Arg.Any<object[]>());
+      logWriter2.DidNotReceive().Log(id, Arg.Any<object[]>());
     }
 
 
@@ -143,8 +143,8 @@ namespace LoggingTest
 
       Logger.Log(Logger.LogLevel, "id");
 
-      logWriter1.DidNotReceive().Log(Logger.LogLevel, Arg.Any<string>(), Arg.Any<object[]>());
-      logWriter2.DidNotReceive().Log(Logger.LogLevel, Arg.Any<string>(), Arg.Any<object[]>());
+      logWriter1.DidNotReceive().Log(Arg.Any<string>(), Arg.Any<object[]>());
+      logWriter2.DidNotReceive().Log(Arg.Any<string>(), Arg.Any<object[]>());
     }
 
 
@@ -159,7 +159,7 @@ namespace LoggingTest
 
       Logger.Log(Logger.LogLevel, "id");
 
-      logWriter.Received(1).Log(Logger.LogLevel, Arg.Any<string>(), Arg.Any<object[]>());
+      logWriter.Received(1).Log(Arg.Any<string>(), Arg.Any<object[]>());
     }
 
 
@@ -171,7 +171,7 @@ namespace LoggingTest
       var logWriter = Substitute.For<ILogWriter>();
       Logger.AddLogWriter(logWriter);
 
-      logWriter.When(writer => writer.Log(Arg.Any<LogLevel>(), Arg.Any<string>(), Arg.Any<object[]>()))
+      logWriter.When(writer => writer.Log(Arg.Any<string>(), Arg.Any<object[]>()))
         .Throw(new Exception());
 
       Logger.Log(LogLevel.Warning, "id");

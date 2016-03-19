@@ -17,7 +17,7 @@ namespace LoggingTest
       const string id = "id-str";
 
       var xmlLogEncoder = new XmlLogEncoder();
-      var bytes = xmlLogEncoder.EncodeLogMessage(level, id);
+      var bytes = xmlLogEncoder.EncodeLogMessage(id);
 
       var stream = new MemoryStream(bytes);
       var document = new XmlDocument();
@@ -51,7 +51,7 @@ namespace LoggingTest
       const string param = "param-str";
 
       var xmlLogEncoder = new XmlLogEncoder();
-      var bytes = xmlLogEncoder.EncodeLogMessage(level, id, param, null);
+      var bytes = xmlLogEncoder.EncodeLogMessage(id, param, null);
 
       var stream = new MemoryStream(bytes);
       var document = new XmlDocument();

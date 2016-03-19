@@ -30,9 +30,9 @@ namespace Logging
     }
 
 
-    public void Log(LogLevel level, string id, params object[] parameters)
+    public void Log(string id, params object[] parameters)
     {
-      var bytes = Encoder.EncodeLogMessage(level, id, parameters);
+      var bytes = Encoder.EncodeLogMessage(id, parameters);
       if (bytes == null)
         return;
 

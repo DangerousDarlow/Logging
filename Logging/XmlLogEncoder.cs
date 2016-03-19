@@ -10,7 +10,7 @@ namespace Logging
   /// </summary>
   public class XmlLogEncoder : ILogEncoder
   {
-    public byte[] EncodeLogMessage(LogLevel level, string id, params object[] parameters)
+    public byte[] EncodeLogMessage(string id, params object[] parameters)
     {
       var stringWriter = new StringWriter();
 

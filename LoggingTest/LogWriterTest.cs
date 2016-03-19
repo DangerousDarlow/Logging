@@ -21,9 +21,9 @@ namespace LoggingTest
 
       const string id = "id";
 
-      logWriter.Log(level, id);
+      logWriter.Log(id);
 
-      encoder.Received(1).EncodeLogMessage(level, id, Arg.Any<object[]>());
+      encoder.Received(1).EncodeLogMessage(id, Arg.Any<object[]>());
       byteWriter1.Received(1).WriteBytes(Arg.Any<byte[]>());
       byteWriter2.Received(1).WriteBytes(Arg.Any<byte[]>());
     }
@@ -43,9 +43,9 @@ namespace LoggingTest
       const string id = "id";
       var parameters = new object[0];
 
-      logWriter.Log(level, id, parameters);
+      logWriter.Log(id, parameters);
 
-      encoder.Received(1).EncodeLogMessage(level, id, parameters);
+      encoder.Received(1).EncodeLogMessage(id, parameters);
     }
 
 
@@ -98,14 +98,14 @@ namespace LoggingTest
       const LogLevel level = LogLevel.Error;
 
       var encoder = Substitute.For<ILogEncoder>();
-      encoder.EncodeLogMessage(Arg.Any<LogLevel>(), Arg.Any<string>(), Arg.Any<object[]>()).Returns(x => null);
+      encoder.EncodeLogMessage(Arg.Any<string>(), Arg.Any<object[]>()).Returns(x => null);
 
       var byteWriter = Substitute.For<IByteWriter>();
 
       var logWriter = new LogWriter(encoder, byteWriter);
-      logWriter.Log(level, "id");
+      logWriter.Log("id");
 
-      encoder.Received(1).EncodeLogMessage(Arg.Any<LogLevel>(), Arg.Any<string>(), Arg.Any<object[]>());
+      encoder.Received(1).EncodeLogMessage(Arg.Any<string>(), Arg.Any<object[]>());
       byteWriter.DidNotReceive().WriteBytes(Arg.Any<byte[]>());
     }
 
