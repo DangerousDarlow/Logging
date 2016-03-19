@@ -28,7 +28,7 @@ namespace Logging
 
       Writers = byteWriters.ToList();
 
-      LogVersion();
+      LogAssemblies();
     }
 
 
@@ -43,7 +43,7 @@ namespace Logging
     }
 
 
-    private void LogVersion()
+    public void LogAssemblies()
     {
       var bytes = Encoder.EncodeAssemblyInfo();
       if (bytes == null)

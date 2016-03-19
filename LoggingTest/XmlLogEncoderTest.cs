@@ -73,5 +73,13 @@ namespace LoggingTest
       Assert.AreEqual("1", paramElement2.GetAttribute(Resources.IdAttributeName));
       Assert.AreEqual("null", paramElement2.InnerText);
     }
+
+
+    [Test]
+    public void Assembly_information_is_encoded()
+    {
+      var xmlLogEncoder = new XmlLogEncoder();
+      Assert.NotNull(xmlLogEncoder.EncodeAssemblyInfo());
+    }
   }
 }

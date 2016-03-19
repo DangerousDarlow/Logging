@@ -46,6 +46,36 @@ namespace LoggingTest
 
 
     [Test]
+    public void Assembly_info_is_written_on_log_writer_construction()
+    {
+      var encoder = Substitute.For<ILogEncoder>();
+      var byteWriter = Substitute.For<IByteWriter>();
+
+      // ReSharper disable once UnusedVariable
+      var logWriter = new LogWriter(encoder, byteWriter);
+
+      encoder.Received(1).EncodeAssemblyInfo();
+      byteWriter.Received(1).WriteBytes(Arg.Any<byte[]>());
+    }
+
+
+    [Test]
+    public void Assembly_info_is_not_written_if_encoder_returns_null()
+    {
+      var encoder = Substitute.For<ILogEncoder>();
+      encoder.EncodeAssemblyInfo().Returns(x => null);
+
+      var byteWriter = Substitute.For<IByteWriter>();
+
+      // ReSharper disable once UnusedVariable
+      var logWriter = new LogWriter(encoder, byteWriter);
+
+      encoder.Received(1).EncodeAssemblyInfo();
+      byteWriter.DidNotReceive().WriteBytes(Arg.Any<byte[]>());
+    }
+
+
+    [Test]
     public void Constructor_throws_if_passed_null_encoder()
     {
       var byteWriter = Substitute.For<IByteWriter>();
