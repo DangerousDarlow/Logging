@@ -14,10 +14,10 @@ namespace LoggingTest
       Logger.ClearAllLogWriters();
 
       var logWriter1 = Substitute.For<ILogWriter>();
-      Logger.AddLogWriter(logWriter1);
+      Logger.AddLogWriter(new Lazy<ILogWriter>(() => logWriter1));
 
       var logWriter2 = Substitute.For<ILogWriter>();
-      Logger.AddLogWriter(logWriter2);
+      Logger.AddLogWriter(new Lazy<ILogWriter>(() => logWriter2));
 
       const string id = "id";
 
@@ -36,7 +36,7 @@ namespace LoggingTest
       Logger.ClearAllLogWriters();
 
       var logWriter = Substitute.For<ILogWriter>();
-      Logger.AddLogWriter(logWriter);
+      Logger.AddLogWriter(new Lazy<ILogWriter>(() => logWriter));
 
       // Cache initial log level
       var initialLogLevel = Logger.LogLevel;
@@ -59,7 +59,7 @@ namespace LoggingTest
       Logger.ClearAllLogWriters();
 
       var logWriter = Substitute.For<ILogWriter>();
-      Logger.AddLogWriter(logWriter);
+      Logger.AddLogWriter(new Lazy<ILogWriter>(() => logWriter));
 
       const LogLevel level = LogLevel.Warning;
       Logger.LogLevel = level;
@@ -74,8 +74,8 @@ namespace LoggingTest
     {
       Logger.ClearAllLogWriters();
 
-      var logWriter1 = Substitute.For<ILogWriter>();
-      Logger.AddLogWriter(logWriter1);
+      var logWriter = Substitute.For<ILogWriter>();
+      Logger.AddLogWriter(new Lazy<ILogWriter>(() => logWriter));
 
       const string id = "id";
       var parameters = new object[0];
@@ -84,7 +84,7 @@ namespace LoggingTest
       Logger.LogLevel = level;
       Logger.Log(level, id, parameters);
 
-      logWriter1.Received(1).Log(id, parameters);
+      logWriter.Received(1).Log(id, parameters);
     }
 
 
@@ -94,11 +94,12 @@ namespace LoggingTest
       Logger.ClearAllLogWriters();
 
       var logWriter1 = Substitute.For<ILogWriter>();
-      Logger.AddLogWriter(logWriter1);
+      Logger.AddLogWriter(new Lazy<ILogWriter>(() => logWriter1));
 
       var logWriter2 = Substitute.For<ILogWriter>();
-      Logger.AddLogWriter(logWriter2);
-      Logger.RemoveLogWriter(logWriter2);
+      var lazyLogWriter2 = new Lazy<ILogWriter>(() => logWriter2);
+      Logger.AddLogWriter(lazyLogWriter2);
+      Logger.RemoveLogWriter(lazyLogWriter2);
 
       const string id = "id";
 
@@ -115,7 +116,7 @@ namespace LoggingTest
       Logger.ClearAllLogWriters();
 
       var logWriter = Substitute.For<ILogWriter>();
-      Logger.RemoveLogWriter(logWriter);
+      Logger.RemoveLogWriter(new Lazy<ILogWriter>(() => logWriter));
     }
 
 
@@ -134,10 +135,10 @@ namespace LoggingTest
       Logger.ClearAllLogWriters();
 
       var logWriter1 = Substitute.For<ILogWriter>();
-      Logger.AddLogWriter(logWriter1);
+      Logger.AddLogWriter(new Lazy<ILogWriter>(() => logWriter1));
 
       var logWriter2 = Substitute.For<ILogWriter>();
-      Logger.AddLogWriter(logWriter2);
+      Logger.AddLogWriter(new Lazy<ILogWriter>(() => logWriter2));
 
       Logger.ClearAllLogWriters();
 
@@ -154,8 +155,9 @@ namespace LoggingTest
       Logger.ClearAllLogWriters();
 
       var logWriter = Substitute.For<ILogWriter>();
-      Logger.AddLogWriter(logWriter);
-      Logger.AddLogWriter(logWriter);
+      var lazyLogWriter = new Lazy<ILogWriter>(() => logWriter);
+      Logger.AddLogWriter(lazyLogWriter);
+      Logger.AddLogWriter(lazyLogWriter);
 
       Logger.Log(Logger.LogLevel, "id");
 
@@ -169,7 +171,7 @@ namespace LoggingTest
       Logger.ClearAllLogWriters();
 
       var logWriter = Substitute.For<ILogWriter>();
-      Logger.AddLogWriter(logWriter);
+      Logger.AddLogWriter(new Lazy<ILogWriter>(() => logWriter));
 
       logWriter.When(writer => writer.Log(Arg.Any<string>(), Arg.Any<object[]>()))
         .Throw(new Exception());

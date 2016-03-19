@@ -1,4 +1,5 @@
-﻿using Logging;
+﻿using System;
+using Logging;
 
 namespace ExampleLoggingApp
 {
@@ -8,8 +9,7 @@ namespace ExampleLoggingApp
     {
       var logEncoder = new XmlLogEncoder();
       var byteWriter = new LazyStreamByteWriter(FileStreamFactory.CreateApplicationDataFileStream);
-      var logWriter = new LogWriter(logEncoder, byteWriter);
-      Logger.AddLogWriter(logWriter);
+      Logger.AddLogWriter(new Lazy<ILogWriter>(() => new LogWriter(logEncoder, byteWriter)));
 
       Logger.Log(LogLevel.Error, "id-str");
 

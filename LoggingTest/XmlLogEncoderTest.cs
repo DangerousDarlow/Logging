@@ -12,8 +12,6 @@ namespace LoggingTest
     [Test]
     public void Timestamp_and_id_string_are_encoded()
     {
-      const LogLevel level = LogLevel.Error;
-
       const string id = "id-str";
 
       var xmlLogEncoder = new XmlLogEncoder();
@@ -45,8 +43,6 @@ namespace LoggingTest
     [Test]
     public void Parameters_are_encoded()
     {
-      const LogLevel level = LogLevel.Error;
-
       const string id = "id-str";
       const string param = "param-str";
 
@@ -63,7 +59,7 @@ namespace LoggingTest
       var rootElement = document.FirstChild as XmlElement;
       Assert.IsNotNull(rootElement);
 
-      var paramElements = rootElement.GetElementsByTagName("param");
+      var paramElements = rootElement.GetElementsByTagName(Resources.ParameterElementName);
       Assert.NotNull(paramElements);
       Assert.AreEqual(2, paramElements.Count);
 

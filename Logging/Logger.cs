@@ -25,7 +25,7 @@ namespace Logging
     }
 
 
-    private static List<ILogWriter> LogWriters { get; } = new List<ILogWriter>();
+    private static List<Lazy<ILogWriter>> LogWriters { get; } = new List<Lazy<ILogWriter>>();
 
     private static volatile LogLevel mLogLevel = LogLevel.Warning;
 
@@ -36,7 +36,7 @@ namespace Logging
     /// <summary>
     /// A log writer instance is only added once. Subsequent calls to add the same log writer will have no effect.
     /// </summary>
-    public static void AddLogWriter(ILogWriter logWriter)
+    public static void AddLogWriter(Lazy<ILogWriter> logWriter)
     {
       if (logWriter == null)
         return;
@@ -54,7 +54,7 @@ namespace Logging
     /// <summary>
     /// This function will have no effect if the log writer has not been added
     /// </summary>
-    public static void RemoveLogWriter(ILogWriter logWriter)
+    public static void RemoveLogWriter(Lazy<ILogWriter> logWriter)
     {
       if (logWriter == null)
         return;
@@ -99,7 +99,7 @@ namespace Logging
         {
           try
           {
-            logwriter.Log(id, parameters);
+            logwriter.Value.Log(id, parameters);
           }
           catch (Exception)
           {

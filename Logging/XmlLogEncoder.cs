@@ -24,7 +24,6 @@ namespace Logging
         {
           var index = 0;
 
-          // ReSharper disable once LoopCanBePartlyConvertedToQuery
           foreach (var parameter in parameters)
           {
             xmlWriter.WriteStartElement(Resources.ParameterElementName);
@@ -37,6 +36,25 @@ namespace Logging
 
         xmlWriter.WriteEndElement();
         xmlWriter.WriteWhitespace(Environment.NewLine);
+      }
+
+      return Encoding.UTF8.GetBytes(stringWriter.ToString());
+    }
+
+
+    public byte[] EncodeAssemblyInfo()
+    {
+      var stringWriter = new StringWriter();
+
+      using (var xmlWriter = XmlWriter.Create(stringWriter, mXmlWriterSettings))
+      {
+        foreach (var assembly in AppDomain.CurrentDomain.GetAssemblies())
+        {
+          xmlWriter.WriteStartElement(Resources.AssemblyElementName);
+          xmlWriter.WriteAttributeString(Resources.NameAttributeName, assembly.FullName);
+          xmlWriter.WriteEndElement();
+          xmlWriter.WriteWhitespace(Environment.NewLine);
+        }
       }
 
       return Encoding.UTF8.GetBytes(stringWriter.ToString());

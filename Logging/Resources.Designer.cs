@@ -61,6 +61,15 @@ namespace Logging {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to assembly.
+        /// </summary>
+        public static string AssemblyElementName {
+            get {
+                return ResourceManager.GetString("AssemblyElementName", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to id.
         /// </summary>
         public static string IdAttributeName {
@@ -79,7 +88,16 @@ namespace Logging {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to param.
+        ///   Looks up a localized string similar to name.
+        /// </summary>
+        public static string NameAttributeName {
+            get {
+                return ResourceManager.GetString("NameAttributeName", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to prm.
         /// </summary>
         public static string ParameterElementName {
             get {
@@ -97,7 +115,7 @@ namespace Logging {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to tstmp.
+        ///   Looks up a localized string similar to ts.
         /// </summary>
         public static string TimestampAttributeName {
             get {

@@ -27,12 +27,25 @@ namespace Logging
         throw new ArgumentNullException();
 
       Writers = byteWriters.ToList();
+
+      LogVersion();
     }
 
 
     public void Log(string id, params object[] parameters)
     {
       var bytes = Encoder.EncodeLogMessage(id, parameters);
+      if (bytes == null)
+        return;
+
+      foreach (var byteWriter in Writers)
+        byteWriter.WriteBytes(bytes);
+    }
+
+
+    private void LogVersion()
+    {
+      var bytes = Encoder.EncodeAssemblyInfo();
       if (bytes == null)
         return;
 

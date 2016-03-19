@@ -11,8 +11,6 @@ namespace LoggingTest
     [Test]
     public void Log_encodes_using_encoder_then_writes_using_all_byte_writers()
     {
-      const LogLevel level = LogLevel.Error;
-
       var encoder = Substitute.For<ILogEncoder>();
       var byteWriter1 = Substitute.For<IByteWriter>();
       var byteWriter2 = Substitute.For<IByteWriter>();
@@ -24,16 +22,14 @@ namespace LoggingTest
       logWriter.Log(id);
 
       encoder.Received(1).EncodeLogMessage(id, Arg.Any<object[]>());
-      byteWriter1.Received(1).WriteBytes(Arg.Any<byte[]>());
-      byteWriter2.Received(1).WriteBytes(Arg.Any<byte[]>());
+      byteWriter1.Received(2).WriteBytes(Arg.Any<byte[]>());
+      byteWriter2.Received(2).WriteBytes(Arg.Any<byte[]>());
     }
 
 
     [Test]
     public void Log_passes_parameters_to_encoder()
     {
-      const LogLevel level = LogLevel.Error;
-
       var encoder = Substitute.For<ILogEncoder>();
       var byteWriter1 = Substitute.For<IByteWriter>();
       var byteWriter2 = Substitute.For<IByteWriter>();
@@ -95,8 +91,6 @@ namespace LoggingTest
     [Test]
     public void Write_does_not_occur_if_encoder_returns_null_bytes()
     {
-      const LogLevel level = LogLevel.Error;
-
       var encoder = Substitute.For<ILogEncoder>();
       encoder.EncodeLogMessage(Arg.Any<string>(), Arg.Any<object[]>()).Returns(x => null);
 
@@ -106,7 +100,7 @@ namespace LoggingTest
       logWriter.Log("id");
 
       encoder.Received(1).EncodeLogMessage(Arg.Any<string>(), Arg.Any<object[]>());
-      byteWriter.DidNotReceive().WriteBytes(Arg.Any<byte[]>());
+      byteWriter.Received(1).WriteBytes(Arg.Any<byte[]>());
     }
 
 

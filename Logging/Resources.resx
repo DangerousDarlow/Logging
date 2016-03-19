@@ -118,7 +118,7 @@
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <data name="ParameterElementName" xml:space="preserve">
-    <value>param</value>
+    <value>prm</value>
   </data>
   <data name="IdAttributeName" xml:space="preserve">
     <value>id</value>
@@ -127,9 +127,15 @@
     <value>Logging</value>
   </data>
   <data name="TimestampAttributeName" xml:space="preserve">
-    <value>tstmp</value>
+    <value>ts</value>
   </data>
   <data name="LogElementName" xml:space="preserve">
     <value>log</value>
+  </data>
+  <data name="NameAttributeName" xml:space="preserve">
+    <value>name</value>
+  </data>
+  <data name="AssemblyElementName" xml:space="preserve">
+    <value>assembly</value>
   </data>
 </root>
