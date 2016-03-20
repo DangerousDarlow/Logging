@@ -1,10 +1,9 @@
 ﻿using System;
 using System.IO;
 using System.Xml;
-using Logging;
 using NUnit.Framework;
 
-namespace LoggingTest
+namespace Logging.Test
 {
   [TestFixture]
   public class XmlLogEncoderTest
@@ -51,7 +50,7 @@ namespace LoggingTest
 
       var stream = new MemoryStream(bytes);
       var document = new XmlDocument();
-      using (var xmlReader = XmlReader.Create(stream, new XmlReaderSettings { ConformanceLevel = ConformanceLevel.Fragment }))
+      using (var xmlReader = XmlReader.Create(stream, new XmlReaderSettings {ConformanceLevel = ConformanceLevel.Fragment}))
       {
         document.Load(xmlReader);
       }

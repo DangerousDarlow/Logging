@@ -3,11 +3,11 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 14
 VisualStudioVersion = 14.0.24720.0
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LoggingTest", "LoggingTest\LoggingTest.csproj", "{2818D9FE-010C-49ED-9DEC-4E0203DF212F}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ExampleLoggingApp", "ExampleLoggingApp\ExampleLoggingApp.csproj", "{1F4D976C-31F7-49E1-9066-94F657982CEE}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Logging", "Logging\Logging.csproj", "{EBBE6A67-F97E-4D69-B150-7910AE94997F}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ExampleLoggingApp", "ExampleLoggingApp\ExampleLoggingApp.csproj", "{1F4D976C-31F7-49E1-9066-94F657982CEE}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Logging.Test", "Logging\Logging.Test\Logging.Test.csproj", "{2818D9FE-010C-49ED-9DEC-4E0203DF212F}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

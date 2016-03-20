@@ -1,9 +1,8 @@
 ﻿using System;
-using Logging;
 using NSubstitute;
 using NUnit.Framework;
 
-namespace LoggingTest
+namespace Logging.Test
 {
   [TestFixture]
   public class LoggerTest
