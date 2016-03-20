@@ -1,5 +1,6 @@
 ﻿using System;
 using System.IO;
+using System.Linq;
 
 namespace Logging
 {
@@ -20,8 +21,17 @@ namespace Logging
       if (Directory.Exists(directoryPath) == false)
         Directory.CreateDirectory(directoryPath);
 
-      var fileName = $"{AppDomain.CurrentDomain.FriendlyName}_{DateTime.Now.ToString("s")}.log.txt";
+      var fileNameBase = AppDomain.CurrentDomain.FriendlyName;
+      const string fileExtension = ".log.txt";
 
+      // List existing log files ordered by last write time
+      var files = Directory.GetFiles(directoryPath, $"{fileNameBase}*{fileExtension}").OrderBy(Directory.GetLastWriteTimeUtc).ToList();
+
+      const int maxFiles = 5;
+      for (var index = 0; index < files.Count - maxFiles; ++index)
+        File.Delete(files[index]);
+
+      var fileName = $"{fileNameBase}_{DateTime.Now.ToString("s")}{fileExtension}";
       fileName = fileName.Replace(":", "_");
       fileName = fileName.Replace("-", "_");
 

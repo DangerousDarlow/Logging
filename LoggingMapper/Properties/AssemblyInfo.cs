@@ -5,12 +5,12 @@ using System.Runtime.InteropServices;
 // set of attributes. Change these attribute values to modify the information
 // associated with an assembly.
 
-[assembly: AssemblyTitle("Logging")]
-[assembly: AssemblyDescription("Simple debug logging framework")]
+[assembly: AssemblyTitle("LoggingMapper")]
+[assembly: AssemblyDescription("Compiles or creates logging map from source code")]
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("")]
-[assembly: AssemblyProduct("Logging")]
-[assembly: AssemblyCopyright("Copyright © Nick Darlow 2015 - 2016")]
+[assembly: AssemblyProduct("LoggingMapper")]
+[assembly: AssemblyCopyright("Copyright © Nick Darlow 2016")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
 
@@ -22,7 +22,7 @@ using System.Runtime.InteropServices;
 
 // The following GUID is for the ID of the typelib if this project is exposed to COM
 
-[assembly: Guid("cca7d257-f586-4701-8ee3-c7b97c5f261f")]
+[assembly: Guid("45fccc5d-9644-4612-b5b6-cd473f99d902")]
 
 // Version information for an assembly consists of the following four values:
 //

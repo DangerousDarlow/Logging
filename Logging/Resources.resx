@@ -117,25 +117,25 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
-  <data name="FileAttributeName" xml:space="preserve">
-    <value>file</value>
+  <data name="ParameterElementName" xml:space="preserve">
+    <value>prm</value>
   </data>
-  <data name="FrameElementName" xml:space="preserve">
-    <value>frame</value>
-  </data>
-  <data name="LineAttributeName" xml:space="preserve">
-    <value>line</value>
-  </data>
-  <data name="MessageAttributeName" xml:space="preserve">
-    <value>message</value>
-  </data>
-  <data name="MethodAttributeName" xml:space="preserve">
-    <value>method</value>
+  <data name="IdAttributeName" xml:space="preserve">
+    <value>id</value>
   </data>
   <data name="SubdirectoryName" xml:space="preserve">
     <value>Logging</value>
   </data>
   <data name="TimestampAttributeName" xml:space="preserve">
-    <value>timestamp</value>
+    <value>ts</value>
+  </data>
+  <data name="LogElementName" xml:space="preserve">
+    <value>log</value>
+  </data>
+  <data name="NameAttributeName" xml:space="preserve">
+    <value>name</value>
+  </data>
+  <data name="AssemblyElementName" xml:space="preserve">
+    <value>assembly</value>
   </data>
 </root>

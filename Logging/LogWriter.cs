@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.Linq;
 
 namespace Logging
@@ -28,12 +27,14 @@ namespace Logging
         throw new ArgumentNullException();
 
       Writers = byteWriters.ToList();
+
+      LogAssemblies();
     }
 
 
-    public void Log(LogLevel level, string message, StackTrace stackTrace)
+    public void Log(string id, params object[] parameters)
     {
-      var bytes = Encoder.EncodeLogMessage(level, message, stackTrace, StackFramesToEncode);
+      var bytes = Encoder.EncodeLogMessage(id, parameters);
       if (bytes == null)
         return;
 
@@ -42,9 +43,9 @@ namespace Logging
     }
 
 
-    public void Log(LogLevel level, Exception exception)
+    public void LogAssemblies()
     {
-      var bytes = Encoder.EncodeLogMessage(level, exception, StackFramesToEncode);
+      var bytes = Encoder.EncodeAssemblyInfo();
       if (bytes == null)
         return;
 
@@ -52,11 +53,6 @@ namespace Logging
         byteWriter.WriteBytes(bytes);
     }
 
-
-    /// <summary>
-    /// Set to -1 to encode all available stack frames
-    /// </summary>
-    public int StackFramesToEncode { get; set; } = 3;
 
     private ILogEncoder Encoder { get; }
 

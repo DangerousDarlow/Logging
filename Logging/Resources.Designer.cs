@@ -61,47 +61,47 @@ namespace Logging {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to file.
+        ///   Looks up a localized string similar to assembly.
         /// </summary>
-        public static string FileAttributeName {
+        public static string AssemblyElementName {
             get {
-                return ResourceManager.GetString("FileAttributeName", resourceCulture);
+                return ResourceManager.GetString("AssemblyElementName", resourceCulture);
             }
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to frame.
+        ///   Looks up a localized string similar to id.
         /// </summary>
-        public static string FrameElementName {
+        public static string IdAttributeName {
             get {
-                return ResourceManager.GetString("FrameElementName", resourceCulture);
+                return ResourceManager.GetString("IdAttributeName", resourceCulture);
             }
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to line.
+        ///   Looks up a localized string similar to log.
         /// </summary>
-        public static string LineAttributeName {
+        public static string LogElementName {
             get {
-                return ResourceManager.GetString("LineAttributeName", resourceCulture);
+                return ResourceManager.GetString("LogElementName", resourceCulture);
             }
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to message.
+        ///   Looks up a localized string similar to name.
         /// </summary>
-        public static string MessageAttributeName {
+        public static string NameAttributeName {
             get {
-                return ResourceManager.GetString("MessageAttributeName", resourceCulture);
+                return ResourceManager.GetString("NameAttributeName", resourceCulture);
             }
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to method.
+        ///   Looks up a localized string similar to prm.
         /// </summary>
-        public static string MethodAttributeName {
+        public static string ParameterElementName {
             get {
-                return ResourceManager.GetString("MethodAttributeName", resourceCulture);
+                return ResourceManager.GetString("ParameterElementName", resourceCulture);
             }
         }
         
@@ -115,7 +115,7 @@ namespace Logging {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to timestamp.
+        ///   Looks up a localized string similar to ts.
         /// </summary>
         public static string TimestampAttributeName {
             get {

@@ -1,10 +1,9 @@
 ﻿using System;
 using System.IO;
-using Logging;
 using NSubstitute;
 using NUnit.Framework;
 
-namespace LoggingTest
+namespace Logging.Test
 {
   [TestFixture]
   public class LazyStreamByteWriterTest
@@ -26,12 +25,9 @@ namespace LoggingTest
     [Test]
     public void WriteBytes_does_not_create_stream_if_passed_null_bytes()
     {
-      var createCalls = 0;
+      const int createCalls = 0;
 
-      var lazyStreamByteWriter = new LazyStreamByteWriter(delegate
-      {
-        throw new NotImplementedException();
-      });
+      var lazyStreamByteWriter = new LazyStreamByteWriter(delegate { throw new NotImplementedException(); });
 
       Assert.AreEqual(0, createCalls);
 
@@ -44,12 +40,9 @@ namespace LoggingTest
     [Test]
     public void WriteBytes_does_not_create_stream_if_passed_empty_bytes()
     {
-      var createCalls = 0;
+      const int createCalls = 0;
 
-      var lazyStreamByteWriter = new LazyStreamByteWriter(delegate
-      {
-        throw new NotImplementedException();
-      });
+      var lazyStreamByteWriter = new LazyStreamByteWriter(delegate { throw new NotImplementedException(); });
 
       Assert.AreEqual(0, createCalls);
 

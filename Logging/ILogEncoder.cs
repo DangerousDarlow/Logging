@@ -1,13 +1,13 @@
-﻿using System;
-using System.Diagnostics;
-
-namespace Logging
+﻿namespace Logging
 {
   public interface ILogEncoder
   {
-    byte[] EncodeLogMessage(LogLevel level, string message, StackTrace stackTrace, int stackFramesToEncode);
+    byte[] EncodeLogMessage(string id, params object[] parameters);
 
 
-    byte[] EncodeLogMessage(LogLevel level, Exception exception, int stackFramesToEncode);
+    /// <summary>
+    /// Encode information about loaded application domain assemblies
+    /// </summary>
+    byte[] EncodeAssemblyInfo();
   }
 }
