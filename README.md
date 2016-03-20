@@ -11,7 +11,9 @@ Logging calls are written into the source code.
     Logger.Log(LogLevel.Error, "id-str2", object1, object2);
 
 The second parameter is the log identity string which can be any string but is typically a uuid. A tool is run during development which reads through all source code, identifies calls to the log function and updates the log identity to ensure it is unique.
+
 The build process runs a tool which reads through all source code, identifies calls to the log function and builds a map of log identity, log message (the comment above a log call marked with text 'Logging'), file and line data.
+
 During execution if a call to Log is made and the level is less than the current filter level then the time stamp, log identity string and the result of calls to ToString on passed objects are written to an output stream. When the log file is recovered the map is used to rebuild the message, file and line information for the log call.
 
 # How To Use (Step By Step)
