@@ -25,6 +25,11 @@ namespace LoggingSourceTool
     }
 
 
+    public void CompileMap()
+    {
+    }
+
+
     private void ValidateOptions()
     {
       if (string.IsNullOrWhiteSpace(Options.DirPath))

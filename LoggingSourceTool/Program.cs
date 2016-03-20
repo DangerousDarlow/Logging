@@ -1,5 +1,8 @@
 ﻿using System;
 using CommandLine;
+using System.Configuration;
+using System.Linq;
+using System.Text.RegularExpressions;
 
 namespace LoggingSourceTool
 {
@@ -20,9 +23,11 @@ namespace LoggingSourceTool
         if (parser.ParseArguments(args, options) == false)
           throw new ArgumentException("Invalid command line");
 
-        var analysis = new SourceAnalysis(options, ShowInfo, ShowError);
+        var filtersConfiguration = ConfigurationManager.GetSection(Resources.DirectoryFiltersConfigurationSection) as DirectoryFiltersConfigurationSection;
+        if (filtersConfiguration == null)
+          throw new Exception("Failed to read filters section from app config");
 
-        ShowInfo(options.UpdateMode.ToString());
+        var excludeFilters = filtersConfiguration.Exclude.All.Select(element => new Regex(element.Regex));
 
         Environment.Exit(0);
       }

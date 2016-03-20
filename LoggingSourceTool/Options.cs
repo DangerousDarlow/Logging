@@ -22,6 +22,9 @@ namespace LoggingSourceTool
   }
 
 
+  /// <summary>
+  /// Command line options
+  /// </summary>
   public class Options
   {
     [Option('d', "dir", Required = true, HelpText = "Path of directory containing source to be mapped")]
