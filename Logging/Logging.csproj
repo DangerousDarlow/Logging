@@ -36,10 +36,12 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="FileStreamFactory.cs" />
+    <Compile Include="ILogCallInformation.cs" />
     <Compile Include="LazyStreamByteWriter.cs" />
     <Compile Include="IByteWriter.cs" />
     <Compile Include="ILogEncoder.cs" />
     <Compile Include="ILogWriter.cs" />
+    <Compile Include="LogCallInformation.cs" />
     <Compile Include="Logger.cs" />
     <Compile Include="LogLevel.cs" />
     <Compile Include="LogWriter.cs" />
