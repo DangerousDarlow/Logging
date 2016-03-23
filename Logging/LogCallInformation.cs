@@ -1,8 +1,11 @@
-﻿namespace Logging
+﻿using System;
+
+namespace Logging
 {
   /// <summary>
   /// Information about a log function call
   /// </summary>
+  [Serializable]
   public class LogCallInformation : ILogCallInformation
   {
     /// <summary>

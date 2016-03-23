@@ -68,5 +68,14 @@ namespace LoggingSourceTool {
                 return ResourceManager.GetString("DirectoryFiltersConfigurationSection", resourceCulture);
             }
         }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to LogCalls.
+        /// </summary>
+        internal static string LogCallsElementName {
+            get {
+                return ResourceManager.GetString("LogCallsElementName", resourceCulture);
+            }
+        }
     }
 }

@@ -7,8 +7,9 @@ namespace LoggingSourceTool
 {
   public class SourceFileAnalyser
   {
-    public SourceFileAnalyser(UpdateMode updateMode)
+    public SourceFileAnalyser(bool requireMessage, UpdateMode updateMode)
     {
+      RequireMessage = requireMessage;
       UpdateMode = updateMode;
     }
 
@@ -46,6 +47,8 @@ namespace LoggingSourceTool
           continue;
 
         var messageMatch = MessageRegex.Match(previousLine);
+        if (RequireMessage && messageMatch.Success == false)
+          throw new Exception($"Failed to parse message for log call at line {lineNumber} of file '{file.Path}'");
 
         LogLevel level;
         if (Enum.TryParse(callMatch.Groups[2].Value, out level) == false)
@@ -57,7 +60,7 @@ namespace LoggingSourceTool
           Level = level,
           Message = messageMatch.Success ? messageMatch.Groups[1].Value : null,
           FilePath = file.Path,
-          FileLineNumber = lineNumber
+          FileLineNumber = lineNumber + 1
         };
 
         switch (UpdateMode)
@@ -103,6 +106,8 @@ namespace LoggingSourceTool
     private Regex CallRegex { get; } = new Regex("^(.*Logger.Log\\(\\s*LogLevel\\.(\\w*)\\s*,\\s*\\\")(.*)(\\\".*)$");
 
     private Regex MessageRegex { get; } = new Regex("^\\s*//\\s*Logging\\s*(.*)$");
+
+    private bool RequireMessage { get; }
 
     private UpdateMode UpdateMode { get; }
   }

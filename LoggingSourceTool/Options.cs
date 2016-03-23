@@ -16,6 +16,10 @@ namespace LoggingSourceTool
     public string MapPath { get; set; }
 
 
+    [Option('r', "require_message", DefaultValue = true, HelpText = "Require that every log call has a defined message")]
+    public bool RequireMessage { get; set; }
+
+
     [Option('u', "update", DefaultValue = UpdateMode.None, HelpText = "Source update mode. " +
                                                                       "None = Source will not be updated; errors will be raised if duplicate log identifiers are found. " +
                                                                       "NonUnique = Non-unique log identifiers will be updated. " +

@@ -9,10 +9,13 @@ namespace LoggingSourceTool.Test
   [TestFixture]
   public class SourceFileAnalyserTest
   {
+    private SourceFileAnalyser DefaultSourceFileAnalyser() => new SourceFileAnalyser(false, UpdateMode.None);
+
+
     [Test]
     public void Analyse_throws_if_file_is_null()
     {
-      var analyser = new SourceFileAnalyser(UpdateMode.None);
+      var analyser = DefaultSourceFileAnalyser();
       Assert.That(() => analyser.Analyse(null), Throws.TypeOf<ArgumentNullException>());
     }
 
@@ -24,7 +27,7 @@ namespace LoggingSourceTool.Test
       file.Path.Returns("path");
       file.ReadAllLines().Returns((string[]) null);
 
-      var analyser = new SourceFileAnalyser(UpdateMode.None);
+      var analyser = DefaultSourceFileAnalyser();
       analyser.Analyse(file);
 
       Assert.AreEqual(0, analyser.LogCallMap.Count);
@@ -38,7 +41,7 @@ namespace LoggingSourceTool.Test
       file.Path.Returns("path");
       file.ReadAllLines().Returns(new string[0]);
 
-      var analyser = new SourceFileAnalyser(UpdateMode.None);
+      var analyser = DefaultSourceFileAnalyser();
       analyser.Analyse(file);
 
       Assert.AreEqual(0, analyser.LogCallMap.Count);
@@ -58,12 +61,12 @@ namespace LoggingSourceTool.Test
         $"Logger.Log(LogLevel.Error, \"{identifier}\");"
       });
 
-      var analyser = new SourceFileAnalyser(UpdateMode.None);
+      var analyser = DefaultSourceFileAnalyser();
       analyser.Analyse(file);
 
       Assert.AreEqual(1, analyser.LogCallMap.Count);
       Assert.AreEqual(identifier, analyser.LogCallMap[identifier].Identifier);
-      Assert.AreEqual(0, analyser.LogCallMap[identifier].FileLineNumber);
+      Assert.AreEqual(1, analyser.LogCallMap[identifier].FileLineNumber);
       Assert.AreEqual(filePath, analyser.LogCallMap[identifier].FilePath);
       Assert.AreEqual(LogLevel.Error, analyser.LogCallMap[identifier].Level);
       Assert.IsNull(analyser.LogCallMap[identifier].Message);
@@ -84,7 +87,7 @@ namespace LoggingSourceTool.Test
         $"Logger.Log(LogLevel.Error, \"{identifier}\");"
       });
 
-      var analyser = new SourceFileAnalyser(UpdateMode.None);
+      var analyser = DefaultSourceFileAnalyser();
       analyser.Analyse(file);
 
       Assert.AreEqual(1, analyser.LogCallMap.Count);
@@ -105,7 +108,7 @@ namespace LoggingSourceTool.Test
         $"    Logger.Log( LogLevel.Error , \"{identifier}\" , obj1 , obj2 );"
       });
 
-      var analyser = new SourceFileAnalyser(UpdateMode.None);
+      var analyser = DefaultSourceFileAnalyser();
       analyser.Analyse(file);
 
       Assert.AreEqual(identifier, analyser.LogCallMap[identifier].Identifier);
@@ -127,11 +130,29 @@ namespace LoggingSourceTool.Test
         $"Logger.Log(LogLevel.Error, \"{identifier}\");"
       });
 
-      var analyser = new SourceFileAnalyser(UpdateMode.None);
+      var analyser = DefaultSourceFileAnalyser();
       analyser.Analyse(file);
 
-      Assert.AreEqual(1, analyser.LogCallMap[identifier].FileLineNumber);
+      Assert.AreEqual(2, analyser.LogCallMap[identifier].FileLineNumber);
       Assert.AreEqual(message, analyser.LogCallMap[identifier].Message);
+    }
+
+
+    [Test]
+    public void Analyse_throws_if_message_is_required_but_no_message_is_found()
+    {
+      const string identifier = "id1";
+      const string filePath = "path";
+
+      var file = Substitute.For<ISourceFile>();
+      file.Path.Returns(filePath);
+      file.ReadAllLines().Returns(new[]
+      {
+        $"Logger.Log(LogLevel.Error, \"{identifier}\");"
+      });
+
+      var analyser = new SourceFileAnalyser(true, UpdateMode.None);
+      Assert.That(() => analyser.Analyse(file), Throws.TypeOf<Exception>());
     }
 
 
@@ -150,7 +171,7 @@ namespace LoggingSourceTool.Test
         $"Logger.Log(LogLevel.Error, \"{identifier}\");"
       });
 
-      var analyser = new SourceFileAnalyser(UpdateMode.None);
+      var analyser = DefaultSourceFileAnalyser();
       analyser.Analyse(file);
 
       Assert.IsNull(analyser.LogCallMap[identifier].Message);
@@ -171,7 +192,7 @@ namespace LoggingSourceTool.Test
         $"Logger.Log(LogLevel.Error, \"{identifier}\");"
       });
 
-      var analyser = new SourceFileAnalyser(UpdateMode.None);
+      var analyser = DefaultSourceFileAnalyser();
       Assert.That(() => analyser.Analyse(file), Throws.TypeOf<Exception>());
     }
 
@@ -189,7 +210,7 @@ namespace LoggingSourceTool.Test
         $"Logger.Log(LogLevel.Invalid, \"{identifier}\");"
       });
 
-      var analyser = new SourceFileAnalyser(UpdateMode.None);
+      var analyser = DefaultSourceFileAnalyser();
       Assert.That(() => analyser.Analyse(file), Throws.TypeOf<Exception>());
     }
 
@@ -208,7 +229,7 @@ namespace LoggingSourceTool.Test
         $"Logger.Log(LogLevel.Error, \"{identifier}\");"
       });
 
-      var analyser = new SourceFileAnalyser(mode);
+      var analyser = new SourceFileAnalyser(false, mode);
       analyser.Analyse(file);
 
       file.DidNotReceive().WriteAllLines(Arg.Any<string[]>());
@@ -229,7 +250,7 @@ namespace LoggingSourceTool.Test
         $"Logger.Log(LogLevel.Error, \"{identifier}\");"
       });
 
-      var analyser = new SourceFileAnalyser(UpdateMode.NonUnique);
+      var analyser = new SourceFileAnalyser(false, UpdateMode.NonUnique);
       analyser.Analyse(file);
 
       var keys = analyser.LogCallMap.Keys.ToList();
@@ -258,7 +279,7 @@ namespace LoggingSourceTool.Test
         $"Logger.Log(LogLevel.Error, \"{identifier}\");"
       });
 
-      var analyser = new SourceFileAnalyser(UpdateMode.All);
+      var analyser = new SourceFileAnalyser(false, UpdateMode.All);
       analyser.Analyse(file);
 
       var keys = analyser.LogCallMap.Keys.ToList();
@@ -287,7 +308,7 @@ namespace LoggingSourceTool.Test
         $"  Logger.Log( LogLevel.Error , \"{identifier}\" , obj1 , obj2 );"
       });
 
-      var analyser = new SourceFileAnalyser(UpdateMode.All);
+      var analyser = new SourceFileAnalyser(false, UpdateMode.All);
       analyser.Analyse(file);
 
       var keys = analyser.LogCallMap.Keys.ToList();

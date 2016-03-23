@@ -3,7 +3,10 @@ using System.Collections.Generic;
 using System.Configuration;
 using System.Linq;
 using System.Text.RegularExpressions;
+using System.Xml;
+using System.Xml.Serialization;
 using CommandLine;
+using Logging;
 
 namespace LoggingSourceTool
 {
@@ -17,7 +20,40 @@ namespace LoggingSourceTool
       {
         ParseOptions(args, options);
 
-        var files = GetSourceFiles(options.DirPath);
+        var analyser = new SourceFileAnalyser(options.RequireMessage, options.UpdateMode);
+
+        if (options.Verbose)
+          ShowInfo($"Searching for source files in directory '{options.DirPath}'");
+
+        var sourcePaths = GetSourceFiles(options.DirPath).ToList();
+        foreach (var sourcePath in sourcePaths)
+        {
+          if (options.Verbose)
+            ShowInfo($"Analysing source file '{sourcePath}'");
+
+          analyser.Analyse(new SourceFile(sourcePath, options.DirPath));
+        }
+
+        if (options.Verbose)
+          ShowInfo($"Serialising log call map to '{options.MapPath}'");
+
+        using (var writer = XmlWriter.Create(options.MapPath, new XmlWriterSettings {Indent = true, IndentChars = "  "}))
+        {
+          writer.WriteStartElement(Resources.LogCallsElementName);
+
+          var serialiser = new XmlSerializer(typeof (LogCallInformation));
+
+          var serialiserNamespaces = new XmlSerializerNamespaces();
+          serialiserNamespaces.Add("", "");
+
+          foreach (var info in analyser.LogCallMap.Values)
+            serialiser.Serialize(writer, info, serialiserNamespaces);
+
+          writer.WriteEndElement();
+        }
+
+        if (options.Verbose)
+          ShowInfo($"Complete. {analyser.LogCallMap.Count} call(s) mapped in {sourcePaths.Count} file(s).");
 
         Environment.Exit(0);
       }
