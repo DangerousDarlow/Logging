@@ -1,0 +1,17 @@
+<?xml version="1.0"?>
+<package xmlns="http://schemas.microsoft.com/packaging/2010/07/nuspec.xsd">
+  <metadata>
+    <id>LoggingSourceTool</id>
+    <version>2.0.0</version>
+    <authors>Nick Darlow</authors>
+    <requireLicenseAcceptance>false</requireLicenseAcceptance>
+    <description>Tool for identity management and mapping of logging calls</description>
+  </metadata>
+  <files>
+    <file src="App\CommandLine.dll" target="app" />
+	<file src="App\CommandLine.xml" target="app" />
+	<file src="App\Logging.dll" target="app" />
+	<file src="App\LoggingSourceTool.exe" target="app" />
+	<file src="App\LoggingSourceTool.config" target="app" />
+  </files>
+</package>

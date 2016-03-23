@@ -196,5 +196,6 @@ FakesAssemblies/
 *.opt
 
 # Project specific ignores
+App
 Lib
 Test
