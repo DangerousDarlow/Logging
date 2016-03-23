@@ -12,6 +12,6 @@
 	<file src="App\CommandLine.xml" target="app" />
 	<file src="App\Logging.dll" target="app" />
 	<file src="App\LoggingSourceTool.exe" target="app" />
-	<file src="App\LoggingSourceTool.config" target="app" />
+	<file src="App\LoggingSourceTool.exe.config" target="app" />
   </files>
 </package>
