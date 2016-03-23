@@ -2,20 +2,25 @@
 {
   public interface ILogCallInformation
   {
+    /// <summary>
+    /// Unique log call identifier
+    /// </summary>
+    string Identifier { get; }
+
     LogLevel Level { get; }
 
     /// <summary>
-    /// Debug message associated with call
+    /// Debug message associated with log call
     /// </summary>
     string Message { get; }
 
     /// <summary>
-    /// File containing call
+    /// File containing log call
     /// </summary>
     string FilePath { get; }
 
     /// <summary>
-    /// Line number of call in file
+    /// Line number of log call in file
     /// </summary>
     int FileLineNumber { get; }
   }

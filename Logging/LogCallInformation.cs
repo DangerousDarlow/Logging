@@ -5,6 +5,11 @@
   /// </summary>
   public class LogCallInformation : ILogCallInformation
   {
+    /// <summary>
+    /// Unique log call identifier
+    /// </summary>
+    public string Identifier { get; set; }
+
     public LogLevel Level { get; set; }
 
     /// <summary>
