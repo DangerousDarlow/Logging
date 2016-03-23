@@ -79,14 +79,11 @@ namespace LoggingSourceTool
             }
             break;
 
-          case UpdateMode.None:
+          default:
             if (LogCallMap.ContainsKey(callInfo.Identifier))
               throw new Exception($"Duplicate log identifier '{callInfo.Identifier}' in file '{file.Path}'");
 
             break;
-
-          default:
-            throw new Exception("Unhandled update mode");
         }
 
         LogCallMap.Add(callInfo.Identifier, callInfo);
