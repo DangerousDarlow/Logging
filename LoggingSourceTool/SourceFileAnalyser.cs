@@ -105,7 +105,7 @@ namespace LoggingSourceTool
 
     private Regex CallRegex { get; } = new Regex("^(.*Logger.Log\\(\\s*LogLevel\\.(\\w*)\\s*,\\s*\\\")(.*)(\\\".*)$");
 
-    private Regex MessageRegex { get; } = new Regex("^\\s*//\\s*Logging\\s*(.*)$");
+    private Regex MessageRegex { get; } = new Regex("^\\s*//\\s*LogMsg\\s*(.*)$");
 
     private bool RequireMessage { get; }
 

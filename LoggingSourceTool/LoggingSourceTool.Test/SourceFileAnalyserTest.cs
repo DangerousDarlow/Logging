@@ -120,13 +120,13 @@ namespace LoggingSourceTool.Test
     {
       const string identifier = "id1";
       const string filePath = "path";
-      const string message = "message";
+      const string message = "multiple word message";
 
       var file = Substitute.For<ISourceFile>();
       file.Path.Returns(filePath);
       file.ReadAllLines().Returns(new[]
       {
-        $"// Logging {message}",
+        $"// LogMsg {message}",
         $"Logger.Log(LogLevel.Error, \"{identifier}\");"
       });
 
