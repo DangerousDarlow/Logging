@@ -17,7 +17,7 @@ namespace LoggingSourceTool
     /// <summary>
     /// Map of log identifier to log call information
     /// </summary>
-    public IDictionary<string, ILogCallInformation> LogCallMap { get; } = new Dictionary<string, ILogCallInformation>();
+    public IDictionary<string, ICallInfo> LogCallMap { get; } = new Dictionary<string, ICallInfo>();
 
 
     /// <summary>
@@ -54,28 +54,28 @@ namespace LoggingSourceTool
         if (Enum.TryParse(callMatch.Groups[2].Value, out level) == false)
           throw new Exception($"Failed to parse log level '{callMatch.Groups[2].Value}' at line {lineNumber} of file '{file.Path}'");
 
-        var callInfo = new LogCallInformation
+        var callInfo = new CallInfo
         {
-          Identifier = callMatch.Groups[3].Value,
-          Level = level,
-          Message = messageMatch.Success ? messageMatch.Groups[1].Value : null,
-          FilePath = file.Path,
-          FileLineNumber = lineNumber + 1
+          Id = callMatch.Groups[3].Value,
+          Lvl = level,
+          Msg = messageMatch.Success ? messageMatch.Groups[1].Value : null,
+          File = file.Path,
+          Line = lineNumber + 1
         };
 
         switch (UpdateMode)
         {
           case UpdateMode.All:
-            callInfo.Identifier = Guid.NewGuid().ToString();
+            callInfo.Id = Guid.NewGuid().ToString();
 
             UpdateLine(lines, lineNumber, callMatch, callInfo);
             writeRequired = true;
             break;
 
           case UpdateMode.NonUnique:
-            if (LogCallMap.ContainsKey(callInfo.Identifier))
+            if (LogCallMap.ContainsKey(callInfo.Id))
             {
-              callInfo.Identifier = Guid.NewGuid().ToString();
+              callInfo.Id = Guid.NewGuid().ToString();
 
               UpdateLine(lines, lineNumber, callMatch, callInfo);
               writeRequired = true;
@@ -83,13 +83,13 @@ namespace LoggingSourceTool
             break;
 
           default:
-            if (LogCallMap.ContainsKey(callInfo.Identifier))
-              throw new Exception($"Duplicate log identifier '{callInfo.Identifier}' in file '{file.Path}'");
+            if (LogCallMap.ContainsKey(callInfo.Id))
+              throw new Exception($"Duplicate log identifier '{callInfo.Id}' in file '{file.Path}'");
 
             break;
         }
 
-        LogCallMap.Add(callInfo.Identifier, callInfo);
+        LogCallMap.Add(callInfo.Id, callInfo);
       }
 
       if (writeRequired)
@@ -97,9 +97,9 @@ namespace LoggingSourceTool
     }
 
 
-    private static void UpdateLine(string[] lines, int lineNumber, Match callMatch, LogCallInformation callInfo)
+    private static void UpdateLine(string[] lines, int lineNumber, Match callMatch, CallInfo callInfo)
     {
-      lines[lineNumber] = callMatch.Groups[1].Value + callInfo.Identifier + callMatch.Groups[4].Value;
+      lines[lineNumber] = callMatch.Groups[1].Value + callInfo.Id + callMatch.Groups[4].Value;
     }
 
 

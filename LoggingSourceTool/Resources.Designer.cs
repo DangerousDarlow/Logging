@@ -70,11 +70,11 @@ namespace LoggingSourceTool {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to LogCalls.
+        ///   Looks up a localized string similar to LogCallInformation.
         /// </summary>
-        internal static string LogCallsElementName {
+        internal static string LogCallInformationElementName {
             get {
-                return ResourceManager.GetString("LogCallsElementName", resourceCulture);
+                return ResourceManager.GetString("LogCallInformationElementName", resourceCulture);
             }
         }
     }

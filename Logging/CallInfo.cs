@@ -6,29 +6,29 @@ namespace Logging
   /// Information about a log function call
   /// </summary>
   [Serializable]
-  public class LogCallInformation : ILogCallInformation
+  public class CallInfo : ICallInfo
   {
     /// <summary>
     /// Unique log call identifier
     /// </summary>
-    public string Identifier { get; set; }
+    public string Id { get; set; }
 
-    public LogLevel Level { get; set; }
+    public LogLevel Lvl { get; set; }
 
     /// <summary>
     /// Debug message associated with call
     /// </summary>
-    public string Message { get; set; }
+    public string Msg { get; set; }
 
     /// <summary>
     /// File containing call
     /// </summary>
-    public string FilePath { get; set; }
+    public string File { get; set; }
 
 
     /// <summary>
     /// Line number of call in file
     /// </summary>
-    public int FileLineNumber { get; set; }
+    public int Line { get; set; }
   }
 }

@@ -65,11 +65,11 @@ namespace LoggingSourceTool.Test
       analyser.Analyse(file);
 
       Assert.AreEqual(1, analyser.LogCallMap.Count);
-      Assert.AreEqual(identifier, analyser.LogCallMap[identifier].Identifier);
-      Assert.AreEqual(1, analyser.LogCallMap[identifier].FileLineNumber);
-      Assert.AreEqual(filePath, analyser.LogCallMap[identifier].FilePath);
-      Assert.AreEqual(LogLevel.Error, analyser.LogCallMap[identifier].Level);
-      Assert.IsNull(analyser.LogCallMap[identifier].Message);
+      Assert.AreEqual(identifier, analyser.LogCallMap[identifier].Id);
+      Assert.AreEqual(1, analyser.LogCallMap[identifier].Line);
+      Assert.AreEqual(filePath, analyser.LogCallMap[identifier].File);
+      Assert.AreEqual(LogLevel.Error, analyser.LogCallMap[identifier].Lvl);
+      Assert.IsNull(analyser.LogCallMap[identifier].Msg);
     }
 
 
@@ -91,7 +91,7 @@ namespace LoggingSourceTool.Test
       analyser.Analyse(file);
 
       Assert.AreEqual(1, analyser.LogCallMap.Count);
-      Assert.AreEqual(identifier, analyser.LogCallMap[identifier].Identifier);
+      Assert.AreEqual(identifier, analyser.LogCallMap[identifier].Id);
     }
 
 
@@ -111,7 +111,7 @@ namespace LoggingSourceTool.Test
       var analyser = DefaultSourceFileAnalyser();
       analyser.Analyse(file);
 
-      Assert.AreEqual(identifier, analyser.LogCallMap[identifier].Identifier);
+      Assert.AreEqual(identifier, analyser.LogCallMap[identifier].Id);
     }
 
 
@@ -133,8 +133,8 @@ namespace LoggingSourceTool.Test
       var analyser = DefaultSourceFileAnalyser();
       analyser.Analyse(file);
 
-      Assert.AreEqual(2, analyser.LogCallMap[identifier].FileLineNumber);
-      Assert.AreEqual(message, analyser.LogCallMap[identifier].Message);
+      Assert.AreEqual(2, analyser.LogCallMap[identifier].Line);
+      Assert.AreEqual(message, analyser.LogCallMap[identifier].Msg);
     }
 
 
@@ -174,7 +174,7 @@ namespace LoggingSourceTool.Test
       var analyser = DefaultSourceFileAnalyser();
       analyser.Analyse(file);
 
-      Assert.IsNull(analyser.LogCallMap[identifier].Message);
+      Assert.IsNull(analyser.LogCallMap[identifier].Msg);
     }
 
 

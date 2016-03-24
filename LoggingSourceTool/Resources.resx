@@ -120,7 +120,7 @@
   <data name="DirectoryFiltersConfigurationSection" xml:space="preserve">
     <value>directory_filters</value>
   </data>
-  <data name="LogCallsElementName" xml:space="preserve">
-    <value>LogCalls</value>
+  <data name="LogCallInformationElementName" xml:space="preserve">
+    <value>LogCallInformation</value>
   </data>
 </root>

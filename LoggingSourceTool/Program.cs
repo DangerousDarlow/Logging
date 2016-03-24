@@ -39,9 +39,9 @@ namespace LoggingSourceTool
 
         using (var writer = XmlWriter.Create(options.MapPath, new XmlWriterSettings {Indent = true, IndentChars = "  "}))
         {
-          writer.WriteStartElement(Resources.LogCallsElementName);
+          writer.WriteStartElement(Resources.LogCallInformationElementName);
 
-          var serialiser = new XmlSerializer(typeof (LogCallInformation));
+          var serialiser = new XmlSerializer(typeof (CallInfo));
 
           var serialiserNamespaces = new XmlSerializerNamespaces();
           serialiserNamespaces.Add("", "");
