@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Configuration;
+using System.IO;
 using System.Linq;
 using System.Text.RegularExpressions;
 using System.Xml;
@@ -36,6 +37,10 @@ namespace LoggingSourceTool
 
         if (options.Verbose)
           ShowInfo($"Serialising log call map to '{options.MapPath}'");
+
+        var mapDir = Path.GetDirectoryName(options.MapPath);
+        if (mapDir != null && Directory.Exists(mapDir) == false)
+          Directory.CreateDirectory(mapDir);
 
         using (var writer = XmlWriter.Create(options.MapPath, new XmlWriterSettings {Indent = true, IndentChars = "  "}))
         {
