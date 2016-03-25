@@ -1,23 +1,23 @@
 # Overview
-This is a basic but flexible logging framework designed to be compatible with obfuscated code. Logging frameworks often use reflection to determine log call position in source code. This does not work if the code has been obfuscated and even if it did having code base details in log files is undesirable. This framework writes a bland log file containing obfuscated information from which useful logging can be interpreted.
+This is a basic but flexible logging framework designed to work with obfuscated code. Logging frameworks frequently use reflection to determine log call position in source code. This does not work if the code has been obfuscated and even if it did having code details in log files is undesirable. This framework writes a bland log file containing obfuscated information from which useful logging can be interpreted.
 
 # How It Works
-Logging calls are written into the source code.
+Log calls like the following are added to source code.
 
-    // Logging message 1
-    Logger.Log(LogLevel.Error, "id-str1");
+    // LogMsg developer friendly message
+    Logger.Log(LogLevel.Error, "004691b4-081f-4c9c-b683-95415b27617c");
 
-    // Logging message2
-    Logger.Log(LogLevel.Error, "id-str2", object1, object2);
+    // LogMsg developer friendly message
+    Logger.Log(LogLevel.Warning, "cf4de595-bcbf-4ff6-bda4-23c85dfc98b6", object1, object2);
 
-The second parameter is the log identity string which can be any string but is typically a uuid. A tool is run during development which reads through all source code, identifies calls to the log function and updates the log identity to ensure it is unique.
+The second parameter is the log identity string which can be any string but is typically a uuid. You don't need to specify these values manually; a tool provided reads source code, identifies log calls and ensures identifiers are unique (updating the source if required). The tool also builds a map of log call information including identity, message (the comment above a log call identified by 'LogMsg'), source file and line number.
 
-The build process runs a tool which reads through all source code, identifies calls to the log function and builds a map of log identity, log message (the comment above a log call marked with text 'Logging'), file and line data.
+During your code execution if a log call is made and the level is less than the current filter level then the time stamp, log identity string and the result of calls to ToString on any passed parameter objects are written to an output stream. Log levels meet the following criteria; Error < Warning < Info < Debug.
 
-During execution if a call to Log is made and the level is less than the current filter level then the time stamp, log identity string and the result of calls to ToString on passed objects are written to an output stream. When the log file is recovered the map is used to rebuild the message, file and line information for the log call.
+The log file and the map generated during the build process are combined to provide useful logging.
 
 # How To Use (Step By Step)
-At application start configure logging with a log writer
+At application start configure logging. The example lines below configure XML encoding to a file in the application data special folder.
 
     var logEncoder = new XmlLogEncoder();
     var byteWriter = new LazyStreamByteWriter(FileStreamFactory.CreateApplicationDataFileStream);
@@ -25,27 +25,26 @@ At application start configure logging with a log writer
 
 Add calls to logging into your code
 
-    // Logging message 1
-    Logger.Log(LogLevel.Error, "id-str1");
+    // LogMsg developer friendly message
+    Logger.Log(LogLevel.Error, "004691b4-081f-4c9c-b683-95415b27617c");
 
-Run the tool to ensure log identifier strings are unique
+Run the LoggingSourceTool to ensure log identifier strings are unique
 
-    to be determined
+    LoggingSourceTool --dir <root of your source> --map <output map file path>
 
-As part of the build run the tool to build a logging map
+The command line above will run the tool in a mode which does not make changes to source code. If duplicate log identifiers are detected the tool will exit with an error. This mode is useful as part of an automated build system where you want unique log identifiers to be verified and a log call map to be generated but don't want any changes to revision controlled source code.
 
-    to be determined
+Running the tool using a different update mode changes the tool behaviour
 
-On recovery of logs run the viewer tool to reconstruct useful logging
+    LoggingSourceTool --dir <root of your source> --map <output map file path> --update NonUnique
 
-    to be determined
+Modes available are None (as described above), NonUnique and All. If the mode is NonUnique then when a log message with a duplicate identifier is found the identifier and source code will be updated. This mode is usually run by a developer before committing source code to revision control. If the mode is All then all log call identifiers will be updated.
 
-# FAQ
-Q. Why isn't building the map and setting unique identities done in a single step?
+The logging tool has option require_message. If require_message is set then each log call line must (or the tool will exit with an error) be preceded by a comment line starting with LogMsg. The content of the line after LogMsg is interpreted as the log message and is compiled into the log call map.
 
-There are two steps because setting unique identities results in changes to source code and building the map does not. Identities are set during development and committed to revision control. Building the map is done during the build process without modifying code.
+On recovery of logs the log call map is used to create useful logging information. At the time of writing the tool to combine logs and log call maps hasn't been written.
 
 # Build Instructions
 The project is developed using Visual Studio 2015. The project has some third party dependencies like the NUnit framework. The project has been configured to use NuGet so provided this is set up correctly Visual Studio should take care of the details.
 
-The project can be built by a continious integration tool such as TeamCity. Add NuGet, Visual Studio and NUnit TeamCity build steps. Add an AssemblyInfo patcher TeamCity build feature to link the assembly version to the build.
+The project can be built by a continious integration tool such as TeamCity.
