@@ -39,7 +39,7 @@ namespace LoggingSourceTool
           ShowInfo($"Serialising log call map to '{options.MapPath}'");
 
         var mapDir = Path.GetDirectoryName(options.MapPath);
-        if (mapDir != null && Directory.Exists(mapDir) == false)
+        if (string.IsNullOrWhiteSpace(mapDir) == false && Directory.Exists(mapDir) == false)
           Directory.CreateDirectory(mapDir);
 
         using (var writer = XmlWriter.Create(options.MapPath, new XmlWriterSettings {Indent = true, IndentChars = "  "}))
