@@ -17,12 +17,14 @@ namespace Logging
     public static Stream CreateApplicationDataFileStream()
     {
       var directoryPath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), Resources.SubdirectoryName);
+      return CreateFileStream(directoryPath);
     }
 
 
     /// <summary>
     /// Create a file stream in the directory specified. The process name and call timestamp will be used as the file name.
     /// </summary>
+    public static Stream CreateFileStream(string directoryPath)
     {
       if (Directory.Exists(directoryPath) == false)
         Directory.CreateDirectory(directoryPath);
