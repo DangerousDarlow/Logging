@@ -73,7 +73,7 @@ namespace LoggingSourceTool
             break;
 
           case UpdateMode.NonUnique:
-            if (LogCallMap.ContainsKey(callInfo.Id))
+            if (LogCallMap.ContainsKey(callInfo.Id) || string.IsNullOrWhiteSpace(callInfo.Id))
             {
               callInfo.Id = Guid.NewGuid().ToString();
 
@@ -83,6 +83,9 @@ namespace LoggingSourceTool
             break;
 
           default:
+            if (string.IsNullOrWhiteSpace(callInfo.Id))
+              throw new Exception($"Zero length log identifier in file '{file.Path}'");
+
             if (LogCallMap.ContainsKey(callInfo.Id))
               throw new Exception($"Duplicate log identifier '{callInfo.Id}' in file '{file.Path}'");
 

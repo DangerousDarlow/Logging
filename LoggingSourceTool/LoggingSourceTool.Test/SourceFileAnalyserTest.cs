@@ -198,6 +198,23 @@ namespace LoggingSourceTool.Test
 
 
     [Test]
+    public void Analyse_throws_if_identifier_is_zero_length_and_update_mode_is_none()
+    {
+      const string filePath = "path";
+
+      var file = Substitute.For<ISourceFile>();
+      file.Path.Returns(filePath);
+      file.ReadAllLines().Returns(new[]
+      {
+        $"Logger.Log(LogLevel.Error, \"\");",
+      });
+
+      var analyser = DefaultSourceFileAnalyser();
+      Assert.That(() => analyser.Analyse(file), Throws.TypeOf<Exception>());
+    }
+
+
+    [Test]
     public void Analyse_throws_if_log_level_is_invalid()
     {
       const string identifier = "id1";
@@ -266,6 +283,32 @@ namespace LoggingSourceTool.Test
 
 
     [Test]
+    public void Analyse_updates_zero_length_identifier_if_update_mode_is_nonunique()
+    {
+      const string filePath = "path";
+
+      var file = Substitute.For<ISourceFile>();
+      file.Path.Returns(filePath);
+      file.ReadAllLines().Returns(new[]
+      {
+        $"Logger.Log(LogLevel.Error, \"\");"
+      });
+
+      var analyser = new SourceFileAnalyser(false, UpdateMode.NonUnique);
+      analyser.Analyse(file);
+
+      var keys = analyser.LogCallMap.Keys.ToList();
+      Assert.AreEqual(1, keys.Count);
+      Assert.IsFalse(string.IsNullOrWhiteSpace(keys[0]));
+
+      file.Received(1).WriteAllLines(Arg.Is<string[]>(strings => strings.SequenceEqual(new[]
+      {
+        $"Logger.Log(LogLevel.Error, \"{keys[0]}\");"
+      })));
+    }
+
+
+    [Test]
     public void Analyse_updates_all_identifiers_if_update_mode_is_all()
     {
       const string identifier = "da4d67ed-7b88-4266-881b-ae11cd56145c";
@@ -276,20 +319,22 @@ namespace LoggingSourceTool.Test
       file.ReadAllLines().Returns(new[]
       {
         $"Logger.Log(LogLevel.Error, \"{identifier}\");",
-        $"Logger.Log(LogLevel.Error, \"{identifier}\");"
+        $"Logger.Log(LogLevel.Error, \"{identifier}\");",
+        $"Logger.Log(LogLevel.Error, \"\");"
       });
 
       var analyser = new SourceFileAnalyser(false, UpdateMode.All);
       analyser.Analyse(file);
 
       var keys = analyser.LogCallMap.Keys.ToList();
-      Assert.AreEqual(2, keys.Count);
+      Assert.AreEqual(3, keys.Count);
       Assert.IsFalse(keys.Contains(identifier));
 
       file.Received(1).WriteAllLines(Arg.Is<string[]>(strings => strings.SequenceEqual(new[]
       {
         $"Logger.Log(LogLevel.Error, \"{keys[0]}\");",
-        $"Logger.Log(LogLevel.Error, \"{keys[1]}\");"
+        $"Logger.Log(LogLevel.Error, \"{keys[1]}\");",
+        $"Logger.Log(LogLevel.Error, \"{keys[2]}\");"
       })));
     }
 
