@@ -1,4 +1,5 @@
 ﻿using System;
+using System.IO;
 using Logging;
 
 namespace ExampleLoggingApp
@@ -11,8 +12,17 @@ namespace ExampleLoggingApp
 
     private static void Main()
     {
+      Logger.LogLevel = LoggingSettings.Settings.Level;
+
+      var rootDir = LoggingSettings.Settings.DirPath;
+      if (string.IsNullOrWhiteSpace(rootDir))
+        rootDir = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData);
+
       var logEncoder = new XmlLogEncoder();
-      var byteWriter = new LazyStreamByteWriter(FileStreamFactory.CreateApplicationDataFileStream);
+
+      var byteWriter = new LazyStreamByteWriter(() => FileStreamFactory.CreateFileStream(
+        Path.Combine(rootDir, Resources.SubdirectoryName)));
+
       Logger.AddLogWriter(new Lazy<ILogWriter>(() => new LogWriter(logEncoder, byteWriter)));
 
       // LogMsg message 1

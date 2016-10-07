@@ -32,6 +32,7 @@
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="System" />
+    <Reference Include="System.Configuration" />
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
@@ -43,6 +44,7 @@
     <Compile Include="ILogWriter.cs" />
     <Compile Include="CallInfo.cs" />
     <Compile Include="Logger.cs" />
+    <Compile Include="LoggingSettings.cs" />
     <Compile Include="LogLevel.cs" />
     <Compile Include="LogWriter.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
